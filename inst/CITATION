@@ -1,0 +1,38 @@
+citHeader("To cite perumammals in publications, please use:")
+
+citEntry(
+  entry = "manual",
+  title = "perumammals: Taxonomic Backbone and Name Validation Tools for Mammals of Peru",
+  author = person("Paul E.", "Santos Andrade"),
+  year = "2025",
+  note = "R package version 0.0.0.1",
+  url = "https://paulesantos.github.io/perumammals/",
+  textVersion = paste(
+    "Santos Andrade, P. E. (2025).",
+    "perumammals: Taxonomic Backbone and Name Validation Tools for Mammals of Peru.",
+    "R package version 0.0.0.1.",
+    "Available at https://paulesantos.github.io/perumammals/."
+  )
+)
+
+citFooter("The taxonomic backbone included in this package is based on the following reference:")
+
+citEntry(
+  entry = "article",
+  title = "Lista actualizada de la diversidad de los mamíferos del Perú y una propuesta para su actualización",
+  author = c(
+    person("Víctor", "Pacheco"),
+    person("R.", "Cadenillas"),
+    person("H.", "Zeballos"),
+    person("C. M.", "Hurtado"),
+    person("D.", "Ruelas"),
+    person("A.", "Pari")
+  ),
+  journal = "Revista peruana de biología",
+  year = "2021",
+  textVersion = paste(
+    "Pacheco, V., Cadenillas, R., Zeballos, H., Hurtado, C. M., Ruelas, D., & Pari, A. (2021).",
+    "Lista actualizada de la diversidad de los mamíferos del Perú y una propuesta para su actualización.",
+    "Revista peruana de biología."
+  )
+)

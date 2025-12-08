@@ -10,9 +10,8 @@ Taxonomic backbone and name validation tools for the mammals of Peru.
 
 **perumammals** provides a curated, standardized and programmatically
 accessible version of the mammal diversity of Peru as compiled by
-**Pacheco et al. (2021)**:  
-*“Lista actualizada de la diversidad de los mamíferos del Perú y una
-propuesta para su actualización”.*
+**Pacheco et al. (2021)**: *“Lista actualizada de la diversidad de los
+mamíferos del Perú y una propuesta para su actualización”.*
 
 This publication represents the most up-to-date and comprehensive
 synthesis of Peruvian mammal diversity, integrating taxonomic revisions,
@@ -95,10 +94,6 @@ Pacheco et al. (2021) incorporate:
 - Clarifications regarding problematic or doubtful taxa.
 - Contextual notes on species with uncertain distributions.
 
-This richness is preserved in the package through columns such as
-**reference** and **scientific_name_full**, allowing users to trace the
-original annotations and bibliographic sources.
-
 ------------------------------------------------------------------------
 
 ## What the Package Provides
@@ -152,10 +147,10 @@ information.
 ``` r
 # Development version from GitHub
 # Using pak (recommended)
-pak::pak("PaulESantos/peruflorads43")
+pak::pak("PaulESantos/perumammals")
 
 # Or using remotes
-remotes::install_github("PaulESantos/peruflorads43")
+remotes::install_github("PaulESantos/perumammals")
 ```
 
 ## Citation

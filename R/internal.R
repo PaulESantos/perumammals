@@ -1,0 +1,140 @@
+#' .onAttach hook
+#'
+#' Hook function that runs when the package is attached via \code{library()}.
+#' It displays the package version and information about the taxonomic backbone.
+#'
+#' @param libname A character string indicating the path to the library.
+#' @param pkgname A character string with the name of the package.
+#' @keywords internal
+.onAttach <- function(libname, pkgname) {
+  # Get package version
+  pkg_version <- utils::packageDescription("perumammals", fields = "Version")
+
+  # Get backbone info
+  backbone <- peru_mammals_backbone
+
+  # Display welcome message
+  packageStartupMessage(
+    cli::col_cyan(cli::style_bold("perumammals")), " ", pkg_version
+  )
+
+  packageStartupMessage(
+    cli::col_grey(
+      paste0(
+        "Taxonomic backbone: Pacheco et al. (", backbone$source_year, ") | ",
+        "Species: ", backbone$n_species
+      )
+    )
+  )
+
+  packageStartupMessage(
+    cli::col_grey("Use pm_backbone_info() for full citation and details")
+  )
+
+  # Check for potential updates (optional)
+  check_result <- tryCatch({
+    check_backbone_update(backbone$source_year)
+  }, error = function(e) {
+    NULL
+  })
+
+  if (!is.null(check_result) && check_result$update_available) {
+    packageStartupMessage(
+      cli::col_yellow(
+        paste0(
+          "\u2139 A orgiinal version of the mammal checklist may be available. ",
+          "Check https://doi.org/10.15381/rpb.v28i4.21019"
+        )
+      )
+    )
+  }
+}
+
+
+# -------------------------------------------------------------------------
+
+#' Determine whether to show progress bar
+#'
+#' Returns logical TRUE/FALSE depending on package options and whether
+#' the session is interactive.
+#'
+#' @return Logical indicating whether progress bars should be shown.
+#' @keywords internal
+show_progress <- function() {
+  isTRUE(getOption("perumammals.show_progress")) && interactive()
+}
+
+
+# -------------------------------------------------------------------------
+
+#' .onLoad hook
+#'
+#' Hook function that runs when the package is loaded.
+#' It sets default options for the package.
+#'
+#' @param libname A character string with the name of the library directory.
+#' @param pkgname A character string with the name of the package.
+#' @keywords internal
+.onLoad <- function(libname, pkgname) {
+  # Get current options
+  opt <- options()
+
+  # Set default package options
+  opt_perumammals <- list(
+    perumammals.show_progress = TRUE,
+    perumammals.verbose = FALSE
+  )
+
+  # Only set options that are not already defined
+  to_set <- !(names(opt_perumammals) %in% names(opt))
+  if (any(to_set)) {
+    options(opt_perumammals[to_set])
+  }
+
+  invisible()
+}
+
+
+# -------------------------------------------------------------------------
+
+#' Check if taxonomic backbone needs updating
+#'
+#' Checks whether a newer version of the Pacheco et al. mammal checklist
+#' might be available based on the publication year.
+#'
+#' @param backbone_year Numeric or character year of the current backbone.
+#'
+#' @return A list with components:
+#'   \itemize{
+#'     \item \code{update_available} – logical indicating if update may be available.
+#'     \item \code{message} – character string with information message.
+#'   }
+#' @keywords internal
+check_backbone_update <- function(backbone_year) {
+  current_year <- as.integer(format(Sys.Date(), "%Y"))
+  backbone_year <- as.integer(backbone_year)
+
+  # If backbone is more than 2 years old, suggest checking for updates
+  years_old <- current_year - backbone_year
+
+  if (years_old >= 2) {
+    return(list(
+      update_available = TRUE,
+      message = paste0(
+        "The taxonomic backbone is from ", backbone_year,
+        " (", years_old, " years old). ",
+        "Consider checking for updates."
+      )
+    ))
+  } else {
+    return(list(
+      update_available = FALSE,
+      message = "Backbone is current."
+    ))
+  }
+}
+
+utils::globalVariables(c(".data", "peru_mammals", "peru_mammals_backbone",
+                         "peru_mammals_ecoregions", "peru_mammals_ecoregions_meta",
+                         "scientific_name species", "scientific_name",
+                         "species"))

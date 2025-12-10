@@ -13,7 +13,8 @@ knitr::opts_chunk$set(
 )
 ```
 
-# perumammals
+# perumammals <img src="man/figures/logo.png" align="right" width="130"/>
+Taxonomic backbone and name validation tools for the mammals of Peru.
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
@@ -22,12 +23,6 @@ knitr::opts_chunk$set(
 [![Codecov test coverage](https://codecov.io/gh/PaulESantos/perumammals/graph/badge.svg)](https://app.codecov.io/gh/PaulESantos/perumammals)
 <!-- badges: end -->
 
-
-
-
-# perumammals <img src="man/figures/logo.png" align="right" width="130"/>
-
-Taxonomic backbone and name validation tools for the mammals of Peru.
 
 ---
 

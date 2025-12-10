@@ -42,7 +42,7 @@
     packageStartupMessage(
       cli::col_yellow(
         paste0(
-          "\u2139 A orgiinal version of the mammal checklist may be available. ",
+          "\u2139 A orginal version of the mammal checklist may be available. ",
           "Check https://doi.org/10.15381/rpb.v28i4.21019"
         )
       )
@@ -134,7 +134,55 @@ check_backbone_update <- function(backbone_year) {
   }
 }
 
-utils::globalVariables(c(".data", "peru_mammals", "peru_mammals_backbone",
-                         "peru_mammals_ecoregions", "peru_mammals_ecoregions_meta",
-                         "scientific_name species", "scientific_name",
-                         "species"))
+
+# variables interns
+
+utils::globalVariables(c(
+  # Objetos de datos internos
+  "peru_mammals",
+  "peru_mammals_backbone",
+  "peru_mammals_ecoregions",
+  "peru_mammals_ecoregions_meta",
+
+  # Variables relacionadas con nombres científicos
+  "scientific_name",
+  "species",
+  "genus",
+  "genus_upper",
+  "species_upper",
+
+  # Variables originales (input)
+  "Orig.Genus",
+  "Orig.Name",
+  "Orig.Species",
+
+  # Variables de coincidencia (match)
+  "Matched.Genus",
+  "Matched.Name",
+  "Matched.Rank",
+  "Matched.Species",
+  "Match.Level",
+  "matched",
+
+  # Variables de ranking y clasificación
+  "Rank",
+  "Comp.Rank",
+  "valid_rank",
+  "sorter",
+
+  # Variables de distancia fuzzy
+  "fuzzy_genus_dist",
+  "fuzzy_species_dist",
+  "genus_dist",
+  "species_dist",
+
+  # Metadatos taxonómicos
+  "Author",
+  "family",
+  "common_name",
+  "endemic",
+
+  # Funciones y objetos especiales
+  ".data",
+  "head"
+))

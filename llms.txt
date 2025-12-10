@@ -1,5 +1,3 @@
-# perumammals
-
 # perumammals ![](reference/figures/logo.png)
 
 Taxonomic backbone and name validation tools for the mammals of Peru.
@@ -235,3 +233,9 @@ Pacheco, V., Cadenillas, R., Zeballos, H., Hurtado, C. M., Ruelas, D., & Pari, A
 - [`validate_peru_mammals()`](https://paulesantos.github.io/perumammals/reference/validate_peru_mammals.md)
   : Match Species Names Against Peru Mammals Database
 
+# Articles
+
+### All vignettes
+
+- [Exploring Mammal Diversity in Peru with
+  perumammals](https://paulesantos.github.io/perumammals/articles/vignette.md):

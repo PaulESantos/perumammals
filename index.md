@@ -1,5 +1,3 @@
-# perumammals
-
 # perumammals ![](reference/figures/logo.png)
 
 Taxonomic backbone and name validation tools for the mammals of Peru.

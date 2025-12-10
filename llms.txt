@@ -173,8 +173,23 @@ Pacheco, V., Cadenillas, R., Zeballos, H., Hurtado, C. M., Ruelas, D., & Pari, A
 
 ## All functions
 
+- [`found_in_peru()`](https://paulesantos.github.io/perumammals/reference/found_in_peru.md)
+  : Quick check: Is species found in Peru?
+
 - [`get_ambiguous_matches()`](https://paulesantos.github.io/perumammals/reference/get_ambiguous_matches.md)
   : Retrieve Ambiguous Match Information for Peru Mammals
+
+- [`get_common_names_peru()`](https://paulesantos.github.io/perumammals/reference/get_common_names_peru.md)
+  : Get taxonomic and common name information for Peru mammals
+
+- [`is_endemic_peru()`](https://paulesantos.github.io/perumammals/reference/is_endemic_peru.md)
+  : Check if species are endemic to Peru
+
+- [`is_peru_mammal()`](https://paulesantos.github.io/perumammals/reference/is_peru_mammal.md)
+  : Check if species are Peru mammals
+
+- [`match_quality_peru()`](https://paulesantos.github.io/perumammals/reference/match_quality_peru.md)
+  : Get match quality for Peru mammal names
 
 - [`peru_mammals`](https://paulesantos.github.io/perumammals/reference/peru_mammals.md)
   : Mammal species of Peru based on Pacheco et al. (2021)

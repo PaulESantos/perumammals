@@ -2,7 +2,7 @@ pandoc: 3.1.11
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles: {}
-last_built: 2025-12-10T01:15Z
+last_built: 2025-12-10T02:32Z
 urls:
   reference: https://paulesantos.github.io/perumammals/reference
   article: https://paulesantos.github.io/perumammals/articles

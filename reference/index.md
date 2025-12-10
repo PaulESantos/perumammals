@@ -2,6 +2,9 @@
 
 ## All functions
 
+- [`get_ambiguous_matches()`](https://paulesantos.github.io/perumammals/reference/get_ambiguous_matches.md)
+  : Retrieve Ambiguous Match Information for Peru Mammals
+
 - [`peru_mammals`](https://paulesantos.github.io/perumammals/reference/peru_mammals.md)
   : Mammal species of Peru based on Pacheco et al. (2021)
 
@@ -42,3 +45,6 @@
 
 - [`pm_species()`](https://paulesantos.github.io/perumammals/reference/pm_species.md)
   : Filter mammal species from the Peruvian backbone
+
+- [`validate_peru_mammals()`](https://paulesantos.github.io/perumammals/reference/validate_peru_mammals.md)
+  : Match Species Names Against Peru Mammals Database

@@ -193,15 +193,26 @@ fuzzy_match_genus <- function(df, target_df = NULL) {
   # SECTION 5: Select First Match for Ambiguous Cases
   # ==========================================================================
 
-  matched <- matched_temp |>
-    dplyr::group_modify(
-      ~if (nrow(.x) == 0) {
-        return(.x)
-      } else {
-        return(dplyr::slice_head(.x, n = 1))
-      }
-    ) |>
-    dplyr::ungroup()
+  # When there are multiple candidate matches with the same distance for a
+  # given input row, we need to select one. However, we must preserve ALL
+  # input rows - the grouping should be by the original input row identity,
+  # not just by Orig.Genus.
+
+  # Strategy: Group by all original columns (which includes unique identifiers
+  # like 'sorter'), then take the first match candidate for each input row.
+
+  if (nrow(matched_temp) > 0) {
+    # Identify columns that were in the original input df
+    original_cols <- intersect(colnames(df), colnames(matched_temp))
+
+    # Group by original columns to preserve each input row
+    matched <- matched_temp |>
+      dplyr::group_by(dplyr::across(dplyr::all_of(original_cols))) |>
+      dplyr::slice_head(n = 1) |>
+      dplyr::ungroup()
+  } else {
+    matched <- matched_temp
+  }
 
   # Preserve ambiguous match attribute
   if (!is.null(attr(matched_temp, "ambiguous_genera"))) {
@@ -491,11 +502,48 @@ fuzzy_match_species_within_genus_helper <- function(df, target_df) {
   # Select First Match for Ambiguous Cases
   # ==========================================================================
 
-  matched_final <- matched |>
-    dplyr::group_by(Orig.Genus, Orig.Species) |>
-    dplyr::arrange(fuzzy_species_dist) |>
-    dplyr::slice_head(n = 1) |>
-    dplyr::ungroup()
+  #matched_final <- matched |>
+  #  dplyr::group_by(Orig.Genus, Orig.Species) |>
+  #  dplyr::arrange(fuzzy_species_dist) |>
+  #  dplyr::slice_head(n = 1) |>
+  #  dplyr::ungroup()
+#
+  ## Clean up extra columns before combining
+  #matched_final <- matched_final |>
+  #  dplyr::select(-dplyr::any_of(c('species', 'species_upper',
+  #                                 'scientific_name', 'common_name')))
+#
+  ## Preserve attribute
+  #if (!is.null(attr(matched, "ambiguous_species"))) {
+  #  attr(matched_final, "ambiguous_species") <- attr(matched, "ambiguous_species")
+  #}
+  # When there are multiple candidate matches with the same distance for a
+  # given input row, we need to select one. However, we must preserve ALL
+  # input rows - the grouping should be by the original input row identity.
+
+  # The issue: grouping by (Orig.Genus, Orig.Species) loses rows when multiple
+  # input rows have the same genus+species but different sorter values.
+  #
+  # Example:
+  # Input has: sorter=1 "AKODON TORQES", sorter=2 "AKODON TORQES", sorter=3 "AKODON TORQES"
+  # After fuzzy match, all three might match to "AKODON TORQUES"
+  # Old code: groups by (AKODON, TORQES), takes 1 row -> LOSES sorter 2 & 3
+  # New code: groups by (sorter, AKODON, TORQES), takes 1 row per sorter -> PRESERVES all
+
+  if (nrow(matched) > 0) {
+    # Identify columns that were in the original input df
+    # These typically include: sorter, Orig.Genus, Orig.Species, Matched.Genus, etc.
+    original_cols <- intersect(colnames(df), colnames(matched))
+
+    # Group by original columns to preserve each input row's identity
+    matched_final <- matched |>
+      dplyr::group_by(dplyr::across(dplyr::all_of(original_cols))) |>
+      dplyr::arrange(fuzzy_species_dist) |>
+      dplyr::slice_head(n = 1) |>
+      dplyr::ungroup()
+  } else {
+    matched_final <- matched
+  }
 
   # Clean up extra columns before combining
   matched_final <- matched_final |>

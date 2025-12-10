@@ -184,5 +184,8 @@ utils::globalVariables(c(
 
   # Funciones y objetos especiales
   ".data",
-  "head"
+  "head",
+
+  "Endemism.Status",
+  "Match.Quality", "Presence.Status", "Summary", "is_fuzzy"
 ))

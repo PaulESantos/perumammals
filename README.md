@@ -1,7 +1,9 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# perumammals
+# perumammals <img src="man/figures/logo.png" align="right" width="130"/>
+
+Taxonomic backbone and name validation tools for the mammals of Peru.
 
 <!-- badges: start -->
 
@@ -13,10 +15,6 @@ status](https://www.r-pkg.org/badges/version/perumammals)](https://CRAN.R-projec
 [![Codecov test
 coverage](https://codecov.io/gh/PaulESantos/perumammals/graph/badge.svg)](https://app.codecov.io/gh/PaulESantos/perumammals)
 <!-- badges: end -->
-
-# perumammals <img src="man/figures/logo.png" align="right" width="130"/>
-
-Taxonomic backbone and name validation tools for the mammals of Peru.
 
 ------------------------------------------------------------------------
 

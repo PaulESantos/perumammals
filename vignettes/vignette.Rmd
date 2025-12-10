@@ -1,0 +1,221 @@
+---
+title: "Exploring Mammal Diversity in Peru with perumammals"
+author: "Paul Efren Santos Andrade"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Exploring Mammal Diversity in Peru with perumammals}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5
+)
+library(perumammals)
+library(dplyr)
+library(ggplot2)
+```
+
+## Introduction
+
+Peru is widely recognized as one of the world's megadiverse countries, ranking second in the Neotropics and the Americas for mammalian diversity, with **573 species** across 13 orders (Pacheco et al., 2021).
+The `perumammals` package provides direct access to this updated taxonomic dataset, enabling researchers, students, and conservation practitioners to explore, validate, and analyze mammals occurring in Peru.
+
+### Dataset Background
+
+The updated mammalian checklist by Pacheco et al. (2021) compiles:
+
+* **573 species**, **223 genera**, **51 families**, **13 orders**
+* **87 endemic species** (15.2% of total)
+* Presence across 9 ecoregions, from coastal deserts to Amazonian rainforests
+* Continuous updates reflecting recent systematic revisions
+
+The package adopts this taxonomic framework and includes tools for validating species names and handling synonyms or misspelled entries via fuzzy matching.
+
+## Loading the Dataset
+
+```{r load-data}
+data("peru_mammals")
+
+glimpse(peru_mammals)
+
+```
+
+## Taxonomic Diversity
+
+### Orders and Species Richness
+
+```{r orders-diversity}
+order_summary <- peru_mammals %>%
+  count(order, sort = TRUE) %>%
+  mutate(percentage = round(n / sum(n) * 100, 1))
+
+order_summary
+
+ggplot(order_summary, aes(x = reorder(order, n), y = n)) +
+  geom_col(fill = "steelblue") +
+  geom_text(aes(label = n), hjust = -0.2, size = 3) +
+  coord_flip() +
+  labs(
+    title = "Mammalian Diversity in Peru by Order",
+    subtitle = "Based on Pacheco et al. (2021)",
+    x = "Order",
+    y = "Number of Species"
+  ) +
+  theme_minimal()
+```
+
+**Rodentia** (194 species) and **Chiroptera** (189 species) together account for nearly **67%** of Peru’s mammalian diversity.
+
+## Endemic Species
+
+```{r endemics}
+endemic_summary <- peru_mammals %>%
+  filter(endemic == TRUE) %>%
+  count(order, sort = TRUE)
+
+endemic_summary
+
+endemism_rate <- peru_mammals %>%
+  group_by(order) %>%
+  summarise(
+    total = n(),
+    endemic = sum(endemic == TRUE),
+    endemic_pct = round(endemic / total * 100, 1)
+  ) %>%
+  filter(endemic > 0) %>%
+  arrange(desc(endemic_pct))
+
+endemism_rate
+```
+
+**Rodentia** contains the largest number of endemic species (56), representing **64.4%** of all mammalian endemics in Peru.
+
+## Geographic Distribution
+
+### Ecoregional Diversity
+
+```{r ecoregions}
+
+ecoregion_diversity <- tribble(
+  ~ecoregion, ~species, ~endemics,
+  "Selva Baja", 320, 18,
+  "Yungas", 256, 48,
+  "Sabana de Palmeras", 78, 0,
+  "Puna", 71, 14,
+  "Vertiente Occidental", 71, 15,
+  "Bosque Seco Ecuatorial", 81, 4,
+  "Bosque Pluvial Pacífico", 69, 0,
+  "Costa", 66, 16,
+  "Oceánica", 30, 0,
+  "Páramo", 26, 4
+) |>
+  mutate(
+    has_endemics = endemics > 0,
+    ecoregion = factor(ecoregion, levels = ecoregion[order(species)])
+  )
+
+# Gráfico
+library(ggplot2)
+ggplot(ecoregion_diversity, aes(x = ecoregion, y = species)) +
+  geom_col(aes(fill = has_endemics), width = 0.8) +
+  geom_text(aes(label = species), hjust = -0.15, size = 3.4) +
+  coord_flip(clip = "off") +
+  scale_fill_manual(
+    values = c("FALSE" = "#5A7BAA", "TRUE" = "#E07A5F"),
+    labels = c("No endemics", "Has endemics"),
+    name = ""
+  ) +
+  labs(
+  title = "Mammal Diversity by Ecoregion of Peru",
+  subtitle = "Colors indicate the presence or absence of endemic species",
+  x = "Ecoregion",
+  y = "Number of Species"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = "bold", size = 14),
+    plot.subtitle = element_text(size = 11),
+    axis.text.y = element_text(size = 10),
+    legend.position = "top",
+    plot.margin = margin(10, 30, 10, 10)
+  )
+```
+
+The **Selva Baja** contains the highest species richness, while the **Yungas** harbor the greatest number of endemic mammals.
+
+## Name Validation and Fuzzy Matching
+
+```{r fuzzy-matching}
+species_list <- c(
+  "Tremarctos ornatos",
+  "Leopardus pardalis",
+  "Odocoileus virginanus",
+  "Lagothrix flavicauda",
+  "Alouatta seniculus",
+  "Puma concolor"
+)
+
+validated <- validate_peru_mammals(
+  species_list,
+  quiet = FALSE
+)
+
+validated %>%
+  select(Orig.Name, Matched.Name, Match.Level, valid_rank)
+```
+
+The fuzzy matching tool corrects common misspellings and returns standardized scientific names while preserving the original input.
+
+## Practical Applications
+
+### Conservation Assessment
+
+```{r conservation-example}
+endemic_primates <- peru_mammals %>%
+  filter(order == "Primates", endemic == TRUE) %>%
+  select(genus, species, common_name)
+
+endemic_primates
+```
+
+### Research Data Cleaning
+
+```{r data-cleaning-example}
+field_data <- data.frame(
+  site = rep(c("Site_A", "Site_B", "Site_C"), each = 3),
+  species = c(
+    "Tremarctos ornatos", "Mazama rufina", "Odocoileus virginianus",
+    "Leopardus pardalis", "Puma concolor", "Leopardus jacobita",
+    "Lagothrix flavicauda", "Ateles belzebuth", "Alouatta seniculus"
+  ),
+  count = c(2, 1, 3, 1, 2, 1, 5, 3, 2)
+)
+
+cleaned_data <- field_data %>%
+  left_join(
+    validate_peru_mammals(field_data$species),
+    by = c("species" = "Orig.Name")
+  ) %>%
+  select(site, original = species, validated = Matched.Name, count, Match.Level)
+
+cleaned_data
+```
+
+
+
+## Citation
+
+### Package Citation
+
+```{r citation, eval=TRUE}
+citation("perumammals")
+```
+
+
+---

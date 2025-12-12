@@ -13,7 +13,7 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.width = 7,
+  fig.width = 8,
   fig.height = 5
 )
 library(perumammals)
@@ -136,7 +136,7 @@ library(waffle)
       "Endemic species"
     )
   ) +
-  coord_equal() +
+  #coord_equal() +
   labs(
     title = "Mammal Endemism by Ecoregion in Peru",
     subtitle = "Each square represents 1% of species. The percentage indicates the proportion of endemic species"
@@ -171,7 +171,7 @@ library(waffle)
       lineheight = 1.2,
       margin = margin(t = 8, b = 8)
     ),
-    plot.margin = margin(20, 20, 20, 20),
+    #plot.margin = margin(20, 20, 20, 20),
     plot.background = element_rect(fill = "white", color = NA),
     panel.spacing = unit(1.5, "lines")
   )
@@ -194,7 +194,7 @@ species_list <- c(
 
 validated <- validate_peru_mammals(
   species_list,
-  quiet = FALSE
+  quiet = TRUE
 )
 
 validated %>%
@@ -247,6 +247,5 @@ cleaned_data
 ```{r citation, eval=TRUE}
 citation("perumammals")
 ```
-
 
 ---

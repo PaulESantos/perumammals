@@ -8,12 +8,14 @@ Taxonomic backbone and name validation tools for the mammals of Peru.
 <!-- badges: start -->
 
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+stable](https://img.shields.io/badge/lifecycle-stable-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/perumammals)](https://CRAN.R-project.org/package=perumammals)
-[![R-CMD-check](https://github.com/PaulESantos/perumammals/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/PaulESantos/perumammals/actions/workflows/R-CMD-check.yaml)
+[![](http://cranlogs.r-pkg.org/badges/grand-total/perumammals?color=green)](https://cran.r-project.org/package=perumammals)
+[![](http://cranlogs.r-pkg.org/badges/last-week/perumammals?color=green)](https://cran.r-project.org/package=perumammals)
 [![Codecov test
-coverage](https://codecov.io/gh/PaulESantos/perumammals/graph/badge.svg)](https://app.codecov.io/gh/PaulESantos/perumammals)
+coverage](https://codecov.io/gh/PaulESantos/perumammals/branch/main/graph/badge.svg)](https://app.codecov.io/gh/PaulESantos/perumammals?branch=main)
+[![R-CMD-check](https://github.com/PaulESantos/perumammals/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/PaulESantos/perumammals/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 ------------------------------------------------------------------------

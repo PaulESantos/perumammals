@@ -1,7 +1,5 @@
-citHeader("To cite perumammals in publications, please use:")
-
-citEntry(
-  entry = "manual",
+bibentry(
+  bibtype = "Manual",
   title = "perumammals: Taxonomic Backbone and Name Validation Tools for Mammals of Peru",
   author = c(
     person("Paul E.", "Santos Andrade"),
@@ -14,28 +12,33 @@ citEntry(
     "Santos Andrade, P. E., & Gonzales Guillen, F. N. (2025).",
     "perumammals: Taxonomic Backbone and Name Validation Tools for Mammals of Peru.",
     "R package version 0.0.0.1.",
-    "Available at https://paulesantos.github.io/perumammals/."
-  )
+    "https://paulesantos.github.io/perumammals/"
+  ),
+  header = "To cite perumammals in publications, please use:",
+  footer = "The taxonomic backbone included in this package is based on:"
 )
 
-citFooter("The taxonomic backbone included in this package is based on the following reference:")
-
-citEntry(
-  entry = "article",
+bibentry(
+  bibtype = "Article",
   title = "Lista actualizada de la diversidad de los mamíferos del Perú y una propuesta para su actualización",
   author = c(
     person("Víctor", "Pacheco"),
-    person("R.", "Cadenillas"),
-    person("H.", "Zeballos"),
-    person("C. M.", "Hurtado"),
-    person("D.", "Ruelas"),
-    person("A.", "Pari")
+    person("Renzo", "Cadenillas"),
+    person("Horacio", "Zeballos"),
+    person("Críspulo M.", "Hurtado"),
+    person("Dennisse", "Ruelas"),
+    person("Alexander", "Pari")
   ),
-  journal = "Revista peruana de biología",
+  journal = "Revista Peruana de Biología",
   year = "2021",
+  volume = "28",
+  number = "special issue",
+  pages = "e21019",
+  doi = "10.15381/rpb.v28i4.21019",
   textVersion = paste(
     "Pacheco, V., Cadenillas, R., Zeballos, H., Hurtado, C. M., Ruelas, D., & Pari, A. (2021).",
     "Lista actualizada de la diversidad de los mamíferos del Perú y una propuesta para su actualización.",
-    "Revista peruana de biología."
+    "Revista Peruana de Biología, 28(special issue), e21019.",
+    "https://doi.org/10.15381/rpb.v28i4.21019"
   )
 )

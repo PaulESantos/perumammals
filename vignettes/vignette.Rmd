@@ -12,14 +12,13 @@ vignette: >
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
-  fig.width = 8,
-  fig.height = 5
+  comment = "#>"
 )
 library(perumammals)
 library(dplyr)
 library(ggplot2)
 library(waffle)
+library(ggtext)
 ```
 
 ## Introduction
@@ -51,7 +50,7 @@ glimpse(peru_mammals)
 
 ### Orders and Species Richness
 
-```{r orders-diversity}
+```{r orders-diversity, fig.width=8, fig.height=6, out.width="100%", fig.align="center"}
 order_summary <- pm_list_orders() |> 
   dplyr::arrange(dplyr::desc(n_species)) |> 
   dplyr::mutate(percentage = round(n_species / sum(n_species) * 100, 1))
@@ -88,17 +87,18 @@ pm_list_endemic(include_rate = TRUE)
 
 ### Ecoregional Diversity
 
-```{r ecoregions}
+```{r ecoregions, fig.width=10, fig.height=12, out.width="100%", fig.align="center"}
 
 ecoregion_diversity <- pm_list_ecoregions(include_endemic = TRUE)
 ecoregion_diversity
 
-# VISUALIZATION
+library(ggtext)
+
 waffle_data <- ecoregion_diversity |> 
   dplyr::select(ecoregion_label, pct_endemic) |> 
   dplyr::mutate(
-    Endemic = round(pct_endemic),      # Endemic species (rounded)
-    Common = 100 - Endemic             # Common species
+    Endemic = round(pct_endemic),
+    Common = 100 - Endemic
   ) |> 
   tidyr::pivot_longer(
     cols = c("Endemic", "Common"),
@@ -112,11 +112,7 @@ waffle_data <- ecoregion_diversity |>
   ) |> 
   dplyr::ungroup()
 
-#  Create waffle chart
-library(waffle)
-
- ggplot(waffle_data, 
-        aes(fill = type, values = percentage)) +
+ggplot(waffle_data, aes(fill = type, values = percentage)) +
   geom_waffle(
     n_rows = 10,
     size = 0.4,
@@ -124,19 +120,13 @@ library(waffle)
     flip = TRUE,
     radius = unit(2, "pt")
   ) +
-  facet_wrap(~ecoregion_full, nrow = 2, ncol = 5) +
+  facet_wrap(~ecoregion_full, ncol = 2) +
   scale_fill_manual(
     name = NULL,
-    values = c(
-      "Common" = "#CBD5E1",   
-      "Endemic" = "#E07A5F"  
-    ),
-    labels = c(
-      "Common species",
-      "Endemic species"
-    )
+    values = c("Common" = "#CBD5E1", "Endemic" = "#E07A5F"),
+    labels = c("Common species", "Endemic species")
   ) +
-  #coord_equal() +
+  coord_equal() +
   labs(
     title = "Mammal Endemism by Ecoregion in Peru",
     subtitle = "Each square represents 1% of species. The percentage indicates the proportion of endemic species"
@@ -144,36 +134,31 @@ library(waffle)
   theme_void() +
   theme(
     plot.title = element_text(
-      face = "bold",
-      size = 16,
-      hjust = 0.5,
+      face = "bold", 
+      size = 16, 
+      hjust = 0.5, 
       margin = margin(b = 5)
     ),
     plot.subtitle = element_text(
-      hjust = 0.5,
-      size = 11,
-      color = "gray30",
+      hjust = 0.5, 
+      size = 10, 
+      color = "gray30", 
       margin = margin(b = 20)
     ),
-    plot.caption = element_text(
-      hjust = 1,
-      size = 8,
-      color = "gray50",
-      margin = margin(t = 15)
-    ),
     legend.position = "bottom",
-    legend.text = element_text(size = 11),
-    legend.key.size = unit(0.8, "cm"),
+    legend.text = element_text(size = 10),
+    legend.key.size = unit(0.7, "cm"),
     legend.margin = margin(t = 15),
     strip.text = element_text(
-      size = 9.5,
-      face = "bold",
-      lineheight = 1.2,
-      margin = margin(t = 8, b = 8)
+      size = 9,
+      face = "bold", 
+      lineheight = 1.1,
+      margin = margin(t = 2, b = 2)  # Márgenes MÍNIMOS
     ),
-    #plot.margin = margin(20, 20, 20, 20),
     plot.background = element_rect(fill = "white", color = NA),
-    panel.spacing = unit(1.5, "lines")
+    panel.spacing.x = unit(1.5, "lines"),
+    panel.spacing.y = unit(1, "lines"),  # Reducir espacio vertical
+    plot.margin = margin(15, 15, 15, 15)
   )
 
 ```
@@ -237,15 +222,4 @@ cleaned_data <- field_data %>%
 
 cleaned_data
 ```
-
-
-
-## Citation
-
-### Package Citation
-
-```{r citation, eval=TRUE}
-citation("perumammals")
-```
-
 ---

@@ -175,11 +175,22 @@ The package:
 
 ``` r
 
-Santos Andrade, P. E. (2025). perumammals: Taxonomic Backbone and Name Validation Tools for Mammals of Peru.
-R package version 0.0.0.1.
-https://paulesantos.github.io/perumammals/
-
-And the original taxonomic source:
-
-Pacheco, V., Cadenillas, R., Zeballos, H., Hurtado, C. M., Ruelas, D., & Pari, A. (2021). Lista actualizada de la diversidad de los mamíferos del Perú y una propuesta para su actualización.
+citation("perumammals")
+#> To cite perumammals in publications, please use:
+#> 
+#>   Santos Andrade, P. E., & Gonzales Guillen, F. N. (2025). perumammals:
+#>   Taxonomic Backbone and Name Validation Tools for Mammals of Peru. R
+#>   package version 0.0.0.1. https://paulesantos.github.io/perumammals/
+#> 
+#> The taxonomic backbone included in this package is based on:
+#> 
+#> Pacheco, V., Cadenillas, R., Zeballos, H., Hurtado, C. M., Ruelas, D.,
+#> & Pari, A. (2021). Lista actualizada de la diversidad de los mamíferos
+#> del Perú y una propuesta para su actualización. Revista Peruana de
+#> Biología, 28(special issue), e21019.
+#> https://doi.org/10.15381/rpb.v28i4.21019
+#> 
+#> To see these entries in BibTeX format, use 'print(<citation>,
+#> bibtex=TRUE)', 'toBibtex(.)', or set
+#> 'options(citation.bibtex.max=999)'.
 ```

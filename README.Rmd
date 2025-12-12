@@ -163,14 +163,8 @@ If you use this package, please cite:
 
 The package:
 
-```r
+```{r}
 
-Santos Andrade, P. E. (2025). perumammals: Taxonomic Backbone and Name Validation Tools for Mammals of Peru.
-R package version 0.0.0.1.
-https://paulesantos.github.io/perumammals/
-
-And the original taxonomic source:
-
-Pacheco, V., Cadenillas, R., Zeballos, H., Hurtado, C. M., Ruelas, D., & Pari, A. (2021). Lista actualizada de la diversidad de los mamíferos del Perú y una propuesta para su actualización.
+citation("perumammals")
 
 ```

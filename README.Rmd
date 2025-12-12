@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# perumammals <img src="man/figures/logo_perumammals.svg" align="right" height="250" width="250"/>
+# perumammals <img src="man/figures/logo_perumammals.png" align="right" height="250" width="250"/>
 Taxonomic backbone and name validation tools for the mammals of Peru.
 
 <!-- badges: start -->

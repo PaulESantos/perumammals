@@ -85,7 +85,7 @@
 #' \code{\link{get_ambiguous_matches}} to retrieve ambiguous match details
 #'
 #' @examples
-#' \dontrun{
+#'
 #' # Basic usage
 #' species_list <- c("Panthera onca", "Tremarctos ornatus", "Puma concolor")
 #' results <- validate_peru_mammals(species_list)
@@ -96,8 +96,8 @@
 #'
 #' # View matched species
 #' results |>
-#'   filter(matched) |>
-#'   select(Orig.Name, Matched.Name, common_name, endemic)
+#'   dplyr::filter(matched) |>
+#'   dplyr::select(Orig.Name, Matched.Name, common_name, endemic)
 #'
 #' # With typos (fuzzy matching)
 #' typos <- c("Pumma concolor", "Tremarctos ornatu")  # Spelling errors
@@ -114,7 +114,6 @@
 #' sp_cases <- c("Akodon sp. Ancash", "Oligoryzomys sp. B")
 #' results_sp <- validate_peru_mammals(sp_cases)
 #' # Should match exactly
-#' }
 #'
 #' @export
 validate_peru_mammals <- function(splist, quiet = TRUE) {

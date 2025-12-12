@@ -32,7 +32,7 @@ This is a convenience wrapper around \code{\link{pm_species}()} with
 \code{endemic = TRUE}.
 }
 \examples{
-\dontrun{
+
 # All endemic species
 pm_endemics()
 
@@ -41,6 +41,6 @@ pm_endemics(order = "Rodentia")
 
 # Endemic species in Yungas (YUN)
 pm_endemics(ecoregion = "YUN")
-}
+
 
 }

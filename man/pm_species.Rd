@@ -38,7 +38,6 @@ Convenience wrapper around \code{peru_mammals} to subset species by
 taxonomic group, endemism and/or ecoregion.
 }
 \examples{
-\dontrun{
 # All species
 pm_species()
 
@@ -50,6 +49,6 @@ pm_species(order = "Chiroptera", endemic = TRUE)
 
 # Species present in Yungas (YUN) and Selva Baja (SB)
 pm_species(ecoregion = c("YUN", "SB"))
-}
+
 
 }

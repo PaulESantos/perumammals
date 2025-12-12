@@ -25,19 +25,6 @@
 #' Names at Rank 1 (genus only) are not matched by this function; use
 #' `genus_match()` instead.
 #'
-#' @examples
-#' \dontrun{
-#' # Prepare data
-#' classified <- .splist_classify(c("Panthera onca", "Tremarctos ornatus"))
-#' transformed <- .transform_split_classify(classified)
-#'
-#' # Match against peru_mammals
-#' data(peru_mammals)
-#' result <- direct_match(transformed, peru_mammals)
-#'
-#' # Check results
-#' table(result$direct_match)
-#' }
 #'
 #' @keywords internal
 direct_match <- function(df, target_df = NULL) {
@@ -203,19 +190,7 @@ direct_match <- function(df, target_df = NULL) {
 #' can be retrieved for further processing (e.g., suggesting possible species
 #' to the user).
 #'
-#' @examples
-#' \dontrun{
-#' # Classify genus-level names
-#' classified <- .splist_classify(c("Panthera", "Tremarctos", "Felis"))
-#' transformed <- .transform_split_classify(classified)
 #'
-#' # Match genera
-#' data(peru_mammals)
-#' result <- genus_match(transformed, peru_mammals)
-#'
-#' # Check which genera are in peru_mammals
-#' result |> filter(genus_match) |> select(Orig.Genus)
-#' }
 #'
 #' @keywords internal
 genus_match <- function(df, target_df = NULL) {
@@ -328,12 +303,7 @@ genus_match <- function(df, target_df = NULL) {
 #' A data frame with genus and species columns for all species in the
 #' matched genera.
 #'
-#' @examples
-#' \dontrun{
-#' # Get all species of Panthera
-#' data(peru_mammals)
-#' panthera_species <- get_species_for_genera("PANTHERA", peru_mammals)
-#' }
+#'
 #'
 #' @keywords internal
 get_species_for_genera <- function(matched_genera, target_df = NULL) {

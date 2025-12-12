@@ -98,7 +98,7 @@ issued and the first match is selected. Use \code{get_ambiguous_matches()}
 to examine these cases.
 }
 \examples{
-\dontrun{
+
 # Basic usage
 species_list <- c("Panthera onca", "Tremarctos ornatus", "Puma concolor")
 results <- validate_peru_mammals(species_list)
@@ -109,8 +109,8 @@ table(results$Match.Level)
 
 # View matched species
 results |>
-  filter(matched) |>
-  select(Orig.Name, Matched.Name, common_name, endemic)
+  dplyr::filter(matched) |>
+  dplyr::select(Orig.Name, Matched.Name, common_name, endemic)
 
 # With typos (fuzzy matching)
 typos <- c("Pumma concolor", "Tremarctos ornatu")  # Spelling errors
@@ -127,7 +127,6 @@ attr(results, "n_fuzzy_genus")
 sp_cases <- c("Akodon sp. Ancash", "Oligoryzomys sp. B")
 results_sp <- validate_peru_mammals(sp_cases)
 # Should match exactly
-}
 
 }
 \seealso{

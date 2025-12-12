@@ -35,19 +35,4 @@ not include infraspecific taxa. It handles:
 Names at Rank 1 (genus only) are not matched by this function; use
 \code{genus_match()} instead.
 }
-\examples{
-\dontrun{
-# Prepare data
-classified <- .splist_classify(c("Panthera onca", "Tremarctos ornatus"))
-transformed <- .transform_split_classify(classified)
-
-# Match against peru_mammals
-data(peru_mammals)
-result <- direct_match(transformed, peru_mammals)
-
-# Check results
-table(result$direct_match)
-}
-
-}
 \keyword{internal}

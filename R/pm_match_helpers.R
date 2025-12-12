@@ -1,10 +1,3 @@
-# ============================================================================
-# Funciones Auxiliares para Matching - Adaptadas para peru_mammals
-# ============================================================================
-# Sin infraespecies, sin threat status, sin duplicados complejos
-# Solo matching de nombres binomiales contra base de datos simple
-# ============================================================================
-
 #' Validate Input Parameters
 #' @keywords internal
 .validate_inputs_peru <- function(splist, quiet) {

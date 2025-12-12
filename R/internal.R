@@ -187,5 +187,6 @@ utils::globalVariables(c(
   "head",
 
   "Endemism.Status",
-  "Match.Quality", "Presence.Status", "Summary", "is_fuzzy"
+  "Match.Quality", "Presence.Status", "Summary", "is_fuzzy",
+  "endemic_pct", "endemic_rate", "n_endemic", "n_families", "n_genera", "n_species"
 ))

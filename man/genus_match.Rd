@@ -28,19 +28,4 @@ This function is typically used for names submitted at the genus level
 can be retrieved for further processing (e.g., suggesting possible species
 to the user).
 }
-\examples{
-\dontrun{
-# Classify genus-level names
-classified <- .splist_classify(c("Panthera", "Tremarctos", "Felis"))
-transformed <- .transform_split_classify(classified)
-
-# Match genera
-data(peru_mammals)
-result <- genus_match(transformed, peru_mammals)
-
-# Check which genera are in peru_mammals
-result |> filter(genus_match) |> select(Orig.Genus)
-}
-
-}
 \keyword{internal}

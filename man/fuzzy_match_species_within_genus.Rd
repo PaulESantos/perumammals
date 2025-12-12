@@ -38,23 +38,4 @@ Special handling for "sp." cases:
 \item Fuzzy matching will work on the entire "SP. ANCASH" string
 }
 }
-\examples{
-\dontrun{
-# Process names with typo
-names <- c("Puma concolr", "Tremarctos ornatu")  # Note typos
-processed <- .transform_split_classify(.splist_classify(names))
-
-# First: direct match
-dm_result <- direct_match(processed, peru_mammals)
-
-# Then: genus match for unmatched
-no_matched <- dm_result |> filter(!direct_match)
-gm_result <- genus_match(no_matched, peru_mammals)
-
-# Finally: fuzzy match species within matched genus
-genus_matched <- gm_result |> filter(genus_match)
-fm_result <- fuzzy_match_species_within_genus(genus_matched, peru_mammals)
-}
-
-}
 \keyword{internal}

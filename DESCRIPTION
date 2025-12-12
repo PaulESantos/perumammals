@@ -6,12 +6,17 @@ Authors@R:
              family = "Santos Andrade",
              role = c("aut", "cre"),
              email = "paulefrens@gmail.com",
-             comment = c(ORCID = "0000-0002-6635-0375")))
+             comment = c(ORCID = "0000-0002-6635-0375")),
+      person(given = "Fiorella Nasha",
+             family = "Gonzales Guillen",
+             role = "ctb",
+             email = "fngonzales@uc.cl",
+             comment = c(ORCID = "0000-0001-5240-2464")))
 Maintainer: Paul E. Santos Andrade <paulefrens@gmail.com>
 Description: 
     Provides a curated taxonomic backbone of the mammal species of Peru 
     based on Pacheco et al. (2021) "Lista actualizada de la diversidad de 
-    los mamíferos del Perú y una propuesta para su actualización". 
+    los mamiferos del Peru y una propuesta para su actualizacion". 
     The package includes standardized species data, occurrence by 
     ecoregions, endemism status, and tools for validating and matching 
     scientific names through exact and fuzzy procedures. It is designed as 
@@ -44,5 +49,7 @@ Suggests:
     ggplot2,
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    waffle,
+    tidyr
 VignetteBuilder: knitr

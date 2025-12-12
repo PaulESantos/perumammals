@@ -20,12 +20,4 @@ Helper function to retrieve all species belonging to matched genera from
 the peru_mammals database. Useful for suggesting possible species when
 only genus is provided.
 }
-\examples{
-\dontrun{
-# Get all species of Panthera
-data(peru_mammals)
-panthera_species <- get_species_for_genera("PANTHERA", peru_mammals)
-}
-
-}
 \keyword{internal}

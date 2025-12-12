@@ -21,8 +21,8 @@ Summarises the number of families, genera, species and endemic species
 per order in \code{peru_mammals}.
 }
 \examples{
-\dontrun{
+
 pm_list_orders()
-}
+
 
 }

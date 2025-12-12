@@ -1,48 +1,144 @@
 #' Display ecoregion metadata for Peruvian mammals
 #'
 #' Displays summary information about the ecoregions used in the Peruvian
-#' mammal backbone. Ecoregions follow the classification system used in
-#' Peruvian biogeography to describe the distribution of mammal species
-#' across different ecological regions.
+#' mammal backbone. Ecoregions follow the Brack-Egg (1986) classification
+#' system used in Peruvian biogeography to describe the distribution of
+#' mammal species across different ecological regions.
 #'
-#' @return Invisibly returns a tibble with the ecoregion metadata table.
-#'   The same structure as \code{\link{peru_mammals_ecoregions_meta}}.
-#'   Called primarily for its side effect of printing the ecoregion information.
+#' @param include_endemic Logical. If \code{TRUE}, includes columns showing
+#'   the number and percentage of endemic species per ecoregion. Default is
+#'   \code{FALSE}.
 #'
-#' @seealso \code{\link{peru_mammals_ecoregions_meta}} for the complete ecoregion metadata,
-#'   \code{\link{pm_by_ecoregion}()} to filter species by ecoregion,
-#'   \code{\link{pm_ecoregion_summary}()} for species richness summaries by ecoregion.
+#' @return A tibble with one row per ecoregion, arranged in descending order
+#'   by species richness, with the following columns:
+#'   \describe{
+#'     \item{ecoregion_code}{Abbreviated ecoregion code (e.g., "SB", "YUN")}
+#'     \item{ecoregion_label}{Full ecoregion name in Spanish}
+#'     \item{n_species}{Total number of mammal species recorded in the ecoregion}
+#'     \item{pct_species}{Percentage of Peru's total mammal diversity (0-100)}
+#'     \item{n_endemic}{(Only if \code{include_endemic = TRUE}) Number of
+#'       endemic species in the ecoregion}
+#'     \item{pct_endemic}{(Only if \code{include_endemic = TRUE}) Percentage of
+#'       endemic species relative to total species in the ecoregion (0-100)}
+#'   }
+#'
+#' @details
+#' The ecoregion classification follows Brack-Egg (1986), a widely-used
+#' biogeographic framework for Peru that recognizes 10 distinct ecological
+#' regions based on climate, vegetation, and elevation. This classification
+#' is used in Pacheco et al. (2021) to document the distribution patterns
+#' of Peruvian mammals.
+#'
+#' The function prints a formatted summary to the console and invisibly
+#' returns the complete data for further analysis.
+#'
+#' @references
+#' Brack-Egg, A. (1986). Ecología de un país complejo. In J. Mejía Baca (Ed.),
+#' Gran Geografía del Perú: Naturaleza y Hombre (Vol. 2, pp. 175-319).
+#' Barcelona: Manfer-Mejía Baca.
+#'
+#' @seealso
+#' \code{\link{peru_mammals_ecoregions_meta}} for the complete ecoregion metadata,
+#' \code{\link{peru_mammals_ecoregions}} for species-ecoregion associations,
+#' \code{\link{pm_by_ecoregion}()} to filter species by ecoregion,
+#' \code{\link{pm_ecoregion_summary}()} for species richness summaries by ecoregion.
 #'
 #' @examples
 #' # Display ecoregion information
 #' pm_list_ecoregions()
 #'
-#' # Access the data invisibly returned
-#' ecoregion_data <- pm_list_ecoregions()
-#' nrow(ecoregion_data)
+#' # Include endemic species information
+#'  pm_list_ecoregions(include_endemic = TRUE)
 #'
-#' # Get just the codes
-#' ecoregion_data$ecoregion_code
+#' # Access the data for further analysis
+#' ecoregion_data <- pm_list_ecoregions()
+#'
+#' # Ecoregions with highest species richness
+#' ecoregion_data
 #'
 #' @export
-pm_list_ecoregions <- function() {
+pm_list_ecoregions <- function(include_endemic = FALSE) {
+  # Validate include_endemic parameter
+  if (!is.logical(include_endemic) || length(include_endemic) != 1) {
+    stop("'include_endemic' must be a single logical value (TRUE or FALSE)",
+         call. = FALSE)
+  }
+
   eco <- peru_mammals_ecoregions_meta
 
-  cli::cli_rule(left = "Peruvian Mammal Ecoregions")
+  # Calculate total species in Peru for percentage calculation
+  total_species <- dplyr::n_distinct(peru_mammals$scientific_name)
+
+  # Base summary: species richness per ecoregion
+  result <- peru_mammals_ecoregions |>
+    dplyr::group_by(.data$ecoregion_code) |>
+    dplyr::summarise(
+      n_species = dplyr::n_distinct(.data$scientific_name),
+      .groups = "drop"
+    )
+
+  # Add endemic information if requested
+  if (include_endemic) {
+    endemic_summary <- peru_mammals_ecoregions |>
+      dplyr::left_join(
+        peru_mammals |> dplyr::select(scientific_name, endemic),
+        by = "scientific_name"
+      ) |>
+      dplyr::group_by(.data$ecoregion_code) |>
+      dplyr::summarise(
+        n_endemic = sum(.data$endemic == TRUE, na.rm = TRUE),
+        .groups = "drop"
+      )
+
+    result <- result |>
+      dplyr::left_join(endemic_summary, by = "ecoregion_code")
+  }
+
+  # Join with metadata and calculate percentages
+  result <- eco |>
+    dplyr::left_join(result, by = "ecoregion_code") |>
+    dplyr::mutate(
+      pct_species = round(.data$n_species / total_species * 100, 1)
+    )
+
+  if (include_endemic) {
+    result <- result |>
+      dplyr::mutate(
+        pct_endemic = round(.data$n_endemic / .data$n_species * 100, 1)
+      )
+  }
+
+  # Arrange by species richness (descending)
+  result <- result |>
+    dplyr::arrange(dplyr::desc(.data$n_species))
+
+  # Print formatted output
+  cli::cli_rule(left = "Peruvian Mammal Ecoregions (Brack-Egg, 1986)")
   cli::cli_alert_info("Number of ecoregions: {nrow(eco)}")
+  cli::cli_alert_info("Total mammal species in Peru: {total_species}")
   cli::cli_text("")
-  cli::cli_text("Available ecoregion codes:")
+  cli::cli_text("Ecoregions by species richness:")
   cli::cli_text("")
 
-  for (i in seq_len(nrow(eco))) {
-    cli::cli_text("  {cli::col_cyan(eco$ecoregion_code[i])} - {eco$ecoregion_label[i]}")
+  for (i in seq_len(nrow(result))) {
+    base_text <- "  {cli::col_cyan(result$ecoregion_code[i])} - {result$ecoregion_label[i]}: {cli::col_green(result$n_species[i])} species ({result$pct_species[i]}%)"
+
+    if (include_endemic) {
+      endemic_text <- ", {cli::col_yellow(result$n_endemic[i])} endemic ({result$pct_endemic[i]}%)"
+      cli::cli_text(paste0(base_text, endemic_text))
+    } else {
+      cli::cli_text(base_text)
+    }
   }
 
   cli::cli_text("")
   cli::cli_text(cli::col_grey("Use pm_by_ecoregion() to filter species by ecoregion"))
+  if (!include_endemic) {
+    cli::cli_text(cli::col_grey("Use include_endemic = TRUE to see endemic species counts"))
+  }
   cli::cli_rule()
 
-  invisible(eco)
+  invisible(result)
 }
 
 #' List species by ecoregion

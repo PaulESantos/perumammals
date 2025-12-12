@@ -19,7 +19,6 @@
 #' @return A tibble with a subset of rows from \code{peru_mammals}.
 #'
 #' @examples
-#' \dontrun{
 #' # All species
 #' pm_species()
 #'
@@ -31,7 +30,7 @@
 #'
 #' # Species present in Yungas (YUN) and Selva Baja (SB)
 #' pm_species(ecoregion = c("YUN", "SB"))
-#' }
+#'
 #'
 #' @export
 pm_species <- function(order = NULL,

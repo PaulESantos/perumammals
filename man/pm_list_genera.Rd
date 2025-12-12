@@ -56,9 +56,5 @@ sum(bat_genera$n_endemic)
 # Combination of filters
 pm_list_genera(order = "Chiroptera", family = "Phyllostomidae")
 
-# Invalid input generates warning
-\dontrun{
-pm_list_genera(order = "InvalidOrder")
-}
 
 }

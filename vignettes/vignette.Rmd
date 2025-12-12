@@ -19,6 +19,7 @@ knitr::opts_chunk$set(
 library(perumammals)
 library(dplyr)
 library(ggplot2)
+library(waffle)
 ```
 
 ## Introduction
@@ -51,15 +52,18 @@ glimpse(peru_mammals)
 ### Orders and Species Richness
 
 ```{r orders-diversity}
-order_summary <- peru_mammals %>%
-  count(order, sort = TRUE) %>%
-  mutate(percentage = round(n / sum(n) * 100, 1))
+order_summary <- pm_list_orders() |> 
+  dplyr::arrange(dplyr::desc(n_species)) |> 
+  dplyr::mutate(percentage = round(n_species / sum(n_species) * 100, 1))
 
 order_summary
 
-ggplot(order_summary, aes(x = reorder(order, n), y = n)) +
+ggplot(order_summary, 
+       aes(x = reorder(order, n_species),
+           y = n_species)) +
   geom_col(fill = "steelblue") +
-  geom_text(aes(label = n), hjust = -0.2, size = 3) +
+  geom_text(aes(label = n_species),
+            hjust = -0.2, size = 3) +
   coord_flip() +
   labs(
     title = "Mammalian Diversity in Peru by Order",
@@ -75,23 +79,7 @@ ggplot(order_summary, aes(x = reorder(order, n), y = n)) +
 ## Endemic Species
 
 ```{r endemics}
-endemic_summary <- peru_mammals %>%
-  filter(endemic == TRUE) %>%
-  count(order, sort = TRUE)
-
-endemic_summary
-
-endemism_rate <- peru_mammals %>%
-  group_by(order) %>%
-  summarise(
-    total = n(),
-    endemic = sum(endemic == TRUE),
-    endemic_pct = round(endemic / total * 100, 1)
-  ) %>%
-  filter(endemic > 0) %>%
-  arrange(desc(endemic_pct))
-
-endemism_rate
+pm_list_endemic(include_rate = TRUE)
 ```
 
 **Rodentia** contains the largest number of endemic species (56), representing **64.4%** of all mammalian endemics in Peru.
@@ -102,49 +90,92 @@ endemism_rate
 
 ```{r ecoregions}
 
-ecoregion_diversity <- tribble(
-  ~ecoregion, ~species, ~endemics,
-  "Selva Baja", 320, 18,
-  "Yungas", 256, 48,
-  "Sabana de Palmeras", 78, 0,
-  "Puna", 71, 14,
-  "Vertiente Occidental", 71, 15,
-  "Bosque Seco Ecuatorial", 81, 4,
-  "Bosque Pluvial Pacífico", 69, 0,
-  "Costa", 66, 16,
-  "Oceánica", 30, 0,
-  "Páramo", 26, 4
-) |>
-  mutate(
-    has_endemics = endemics > 0,
-    ecoregion = factor(ecoregion, levels = ecoregion[order(species)])
+ecoregion_diversity <- pm_list_ecoregions(include_endemic = TRUE)
+ecoregion_diversity
+
+# VISUALIZATION
+waffle_data <- ecoregion_diversity |> 
+  dplyr::select(ecoregion_label, pct_endemic) |> 
+  dplyr::mutate(
+    Endemic = round(pct_endemic),      # Endemic species (rounded)
+    Common = 100 - Endemic             # Common species
+  ) |> 
+  tidyr::pivot_longer(
+    cols = c("Endemic", "Common"),
+    names_to = "type",
+    values_to = "percentage"
+  ) |> 
+  dplyr::group_by(ecoregion_label) |> 
+  dplyr::mutate(
+    total_pct = paste0(round(pct_endemic, 1), "% endemic"),
+    ecoregion_full = paste0(ecoregion_label, "\n", total_pct)
+  ) |> 
+  dplyr::ungroup()
+
+#  Create waffle chart
+library(waffle)
+
+ ggplot(waffle_data, 
+        aes(fill = type, values = percentage)) +
+  geom_waffle(
+    n_rows = 10,
+    size = 0.4,
+    colour = "white",
+    flip = TRUE,
+    radius = unit(2, "pt")
+  ) +
+  facet_wrap(~ecoregion_full, nrow = 2, ncol = 5) +
+  scale_fill_manual(
+    name = NULL,
+    values = c(
+      "Common" = "#CBD5E1",   
+      "Endemic" = "#E07A5F"  
+    ),
+    labels = c(
+      "Common species",
+      "Endemic species"
+    )
+  ) +
+  coord_equal() +
+  labs(
+    title = "Mammal Endemism by Ecoregion in Peru",
+    subtitle = "Each square represents 1% of species. The percentage indicates the proportion of endemic species"
+  ) +
+  theme_void() +
+  theme(
+    plot.title = element_text(
+      face = "bold",
+      size = 16,
+      hjust = 0.5,
+      margin = margin(b = 5)
+    ),
+    plot.subtitle = element_text(
+      hjust = 0.5,
+      size = 11,
+      color = "gray30",
+      margin = margin(b = 20)
+    ),
+    plot.caption = element_text(
+      hjust = 1,
+      size = 8,
+      color = "gray50",
+      margin = margin(t = 15)
+    ),
+    legend.position = "bottom",
+    legend.text = element_text(size = 11),
+    legend.key.size = unit(0.8, "cm"),
+    legend.margin = margin(t = 15),
+    strip.text = element_text(
+      size = 9.5,
+      face = "bold",
+      lineheight = 1.2,
+      margin = margin(t = 8, b = 8)
+    ),
+    plot.margin = margin(20, 20, 20, 20),
+    plot.background = element_rect(fill = "white", color = NA),
+    panel.spacing = unit(1.5, "lines")
   )
 
-# Gráfico
-library(ggplot2)
-ggplot(ecoregion_diversity, aes(x = ecoregion, y = species)) +
-  geom_col(aes(fill = has_endemics), width = 0.8) +
-  geom_text(aes(label = species), hjust = -0.15, size = 3.4) +
-  coord_flip(clip = "off") +
-  scale_fill_manual(
-    values = c("FALSE" = "#5A7BAA", "TRUE" = "#E07A5F"),
-    labels = c("No endemics", "Has endemics"),
-    name = ""
-  ) +
-  labs(
-  title = "Mammal Diversity by Ecoregion of Peru",
-  subtitle = "Colors indicate the presence or absence of endemic species",
-  x = "Ecoregion",
-  y = "Number of Species"
-  ) +
-  theme_minimal(base_size = 12) +
-  theme(
-    plot.title = element_text(face = "bold", size = 14),
-    plot.subtitle = element_text(size = 11),
-    axis.text.y = element_text(size = 10),
-    legend.position = "top",
-    plot.margin = margin(10, 30, 10, 10)
-  )
 ```
 
 The **Selva Baja** contains the highest species richness, while the **Yungas** harbor the greatest number of endemic mammals.

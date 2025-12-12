@@ -33,22 +33,6 @@
 #' - Family information from peru_mammals
 #' - Number of species per genus
 #'
-#' @examples
-#' \dontrun{
-#' # Process names
-#' names <- c("Pumma", "Tremarctos", "Felis")  # Note: "Pumma" is typo
-#' processed <- .transform_split_classify(.splist_classify(names))
-#'
-#' # Fuzzy match
-#' data(peru_mammals)
-#' result <- fuzzy_match_genus(processed, peru_mammals)
-#'
-#' # Check results
-#' result |> filter(fuzzy_match_genus)
-#'
-#' # Check ambiguous matches
-#' get_ambiguous_matches(result, type = "genus")
-#' }
 #'
 #' @keywords internal
 fuzzy_match_genus <- function(df, target_df = NULL) {
@@ -285,24 +269,6 @@ fuzzy_match_genus <- function(df, target_df = NULL) {
 #' Special handling for "sp." cases:
 #' - "Akodon sp. Ancash" is treated as a complete specific epithet
 #' - Fuzzy matching will work on the entire "SP. ANCASH" string
-#'
-#' @examples
-#' \dontrun{
-#' # Process names with typo
-#' names <- c("Puma concolr", "Tremarctos ornatu")  # Note typos
-#' processed <- .transform_split_classify(.splist_classify(names))
-#'
-#' # First: direct match
-#' dm_result <- direct_match(processed, peru_mammals)
-#'
-#' # Then: genus match for unmatched
-#' no_matched <- dm_result |> filter(!direct_match)
-#' gm_result <- genus_match(no_matched, peru_mammals)
-#'
-#' # Finally: fuzzy match species within matched genus
-#' genus_matched <- gm_result |> filter(genus_match)
-#' fm_result <- fuzzy_match_species_within_genus(genus_matched, peru_mammals)
-#' }
 #'
 #' @keywords internal
 fuzzy_match_species_within_genus <- function(df, target_df = NULL) {
@@ -631,19 +597,6 @@ fuzzy_match_species_within_genus_helper <- function(df, target_df) {
 #' distances. The matching algorithm automatically selects the first candidate,
 #' but this function allows you to review all alternatives for quality control.
 #'
-#' @examples
-#' \dontrun{
-#' # After fuzzy matching
-#' result <- fuzzy_match_genus(processed, peru_mammals)
-#'
-#' # Check for ambiguous matches
-#' ambiguous <- get_ambiguous_matches(result, type = "genus")
-#'
-#' # Save to file for manual review
-#' get_ambiguous_matches(result, type = "all",
-#'                      save_to_file = TRUE,
-#'                      output_dir = "~/my_validation")
-#' }
 #'
 #' @export
 get_ambiguous_matches <- function(match_result,

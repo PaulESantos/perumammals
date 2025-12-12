@@ -3,12 +3,15 @@ citHeader("To cite perumammals in publications, please use:")
 citEntry(
   entry = "manual",
   title = "perumammals: Taxonomic Backbone and Name Validation Tools for Mammals of Peru",
-  author = person("Paul E.", "Santos Andrade"),
+  author = c(
+    person("Paul E.", "Santos Andrade"),
+    person("Fiorella Nasha", "Gonzales Guillen")
+  ),
   year = "2025",
   note = "R package version 0.0.0.1",
   url = "https://paulesantos.github.io/perumammals/",
   textVersion = paste(
-    "Santos Andrade, P. E. (2025).",
+    "Santos Andrade, P. E., & Gonzales Guillen, F. N. (2025).",
     "perumammals: Taxonomic Backbone and Name Validation Tools for Mammals of Peru.",
     "R package version 0.0.0.1.",
     "Available at https://paulesantos.github.io/perumammals/."

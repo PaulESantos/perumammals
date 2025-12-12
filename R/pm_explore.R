@@ -13,9 +13,9 @@
 #'   }
 #'
 #' @examples
-#' \dontrun{
+#'
 #' pm_list_orders()
-#' }
+#'
 #'
 #' @export
 pm_list_orders <- function() {
@@ -152,10 +152,6 @@ pm_list_families <- function(order = NULL) {
 #' # Combination of filters
 #' pm_list_genera(order = "Chiroptera", family = "Phyllostomidae")
 #'
-#' # Invalid input generates warning
-#' \dontrun{
-#' pm_list_genera(order = "InvalidOrder")
-#' }
 #'
 #' @export
 pm_list_genera <- function(order = NULL, family = NULL) {
@@ -205,6 +201,128 @@ pm_list_genera <- function(order = NULL, family = NULL) {
     dplyr::arrange(.data$order, .data$family, .data$genus)
 }
 
+
+
+#' List endemic mammal species by taxonomic order
+#'
+#' Summarises the diversity of endemic mammal species in Peru, grouped by
+#' taxonomic order. Provides counts of families, genera, and species that
+#' are endemic to Peru within each order. Optionally includes endemism rates
+#' relative to total species richness.
+#'
+#' @param include_rate Logical. If \code{TRUE}, includes additional columns
+#'   showing total species richness and endemism rate for each order.
+#'   Default is \code{FALSE}.
+#'
+#' @return A tibble with one row per order containing endemic species,
+#'   arranged in descending order by number of endemic species, with the
+#'   following columns:
+#'   \describe{
+#'     \item{order}{Taxonomic order}
+#'     \item{n_families}{Number of families with endemic species in the order}
+#'     \item{n_genera}{Number of genera with endemic species in the order}
+#'     \item{n_endemic}{Number of endemic species in the order}
+#'     \item{n_species}{(Only if \code{include_rate = TRUE}) Total number of
+#'       species in the order}
+#'     \item{endemic_rate}{(Only if \code{include_rate = TRUE}) Proportion of
+#'       endemic species (0-1)}
+#'     \item{endemic_pct}{(Only if \code{include_rate = TRUE}) Percentage of
+#'       endemic species (0-100)}
+#'   }
+#'
+#' @details
+#' This function focuses exclusively on species that are endemic to Peru
+#' (i.e., species found nowhere else in the world). Orders without any
+#' endemic species are not included in the output.
+#'
+#' When \code{include_rate = FALSE} (default), results are sorted by the
+#' number of endemic species in descending order, highlighting which orders
+#' have the highest endemic diversity.
+#'
+#' When \code{include_rate = TRUE}, results are sorted by total species
+#' richness in descending order, and include endemism rates to show what
+#' proportion of each order's diversity is endemic to Peru. A summary row
+#' labeled "Total" is appended to show overall statistics.
+#'
+#' @examples
+#' # Summary of endemic species by order
+#' pm_list_endemic()
+#'
+#' # Include endemism rates
+#' pm_list_endemic(include_rate = TRUE)
+#'
+#'
+#' @export
+pm_list_endemic <- function(include_rate = FALSE) {
+  # Validate include_rate parameter
+  if (!is.logical(include_rate) || length(include_rate) != 1) {
+    stop("'include_rate' must be a single logical value (TRUE or FALSE)",
+         call. = FALSE)
+  }
+
+  if (!include_rate) {
+    # Original behavior: endemic species only
+    peru_mammals |>
+      dplyr::filter(.data$endemic == TRUE) |>
+      dplyr::group_by(.data$order) |>
+      dplyr::summarise(
+        n_families = dplyr::n_distinct(.data$family),
+        n_genera   = dplyr::n_distinct(.data$genus),
+        n_endemic  = dplyr::n_distinct(.data$scientific_name),
+        .groups = "drop"
+      ) |>
+      dplyr::arrange(dplyr::desc(.data$n_endemic))
+
+  } else {
+    # Include endemism rates
+    dplyr::bind_rows(
+      # By order
+      peru_mammals |>
+        dplyr::group_by(.data$order) |>
+        dplyr::summarise(
+          n_families = dplyr::n_distinct(.data$family),
+          n_genera   = dplyr::n_distinct(.data$genus),
+          n_endemic  = sum(.data$endemic == TRUE, na.rm = TRUE),
+          n_species  = dplyr::n_distinct(.data$scientific_name),
+          .groups = "drop"
+        ) |>
+        #dplyr::filter(.data$n_endemic > 0) |>
+        dplyr::mutate(
+          endemic_rate = .data$n_endemic / .data$n_species,
+          endemic_pct  = round(.data$endemic_rate * 100, 1)
+        ) |>
+        dplyr::arrange(dplyr::desc(.data$n_species)),
+
+      # Total row
+      peru_mammals |>
+        dplyr::summarise(
+          n_families = dplyr::n_distinct(.data$family[.data$endemic == TRUE]),
+          n_genera   = dplyr::n_distinct(.data$genus[.data$endemic == TRUE]),
+          n_endemic  = sum(.data$endemic == TRUE, na.rm = TRUE),
+          n_species  = dplyr::n_distinct(.data$scientific_name)
+        ) |>
+        dplyr::mutate(
+          order = "Total",
+          endemic_rate = .data$n_endemic / .data$n_species,
+          endemic_pct  = round(.data$endemic_rate * 100, 1)
+        ) |>
+        dplyr::select(
+          order,
+          n_families,
+          n_genera,
+          n_endemic,
+          n_species,
+          endemic_rate,
+          endemic_pct
+        )
+    )
+  }
+}
+
+
+
+
+
 #' List endemic mammal species of Peru
 #'
 #' Returns endemic species from the Peruvian mammal backbone, with optional
@@ -218,7 +336,7 @@ pm_list_genera <- function(order = NULL, family = NULL) {
 #' @return A tibble with endemic species (subset of \code{peru_mammals}).
 #'
 #' @examples
-#' \dontrun{
+#'
 #' # All endemic species
 #' pm_endemics()
 #'
@@ -227,7 +345,7 @@ pm_list_genera <- function(order = NULL, family = NULL) {
 #'
 #' # Endemic species in Yungas (YUN)
 #' pm_endemics(ecoregion = "YUN")
-#' }
+#'
 #'
 #' @export
 pm_endemics <- function(order = NULL,

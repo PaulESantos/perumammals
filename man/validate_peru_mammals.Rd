@@ -96,6 +96,24 @@ The function implements a hierarchical matching pipeline:
 When multiple candidates have identical fuzzy match scores, a warning is
 issued and the first match is selected. Use \code{get_ambiguous_matches()}
 to examine these cases.
+
+\strong{Input Requirements:}
+
+Species names must be provided as binomials (Genus species) WITHOUT:
+\itemize{
+\item Author information: ❌ "Panthera onca Linnaeus"
+\item Infraspecific taxa: ❌ "Panthera onca onca"
+\item Parenthetical authors: ❌ "Panthera onca (Linnaeus, 1758)"
+}
+
+Valid formats:
+\itemize{
+\item Standard binomial: ✅ "Panthera onca"
+\item Undescribed species: ✅ "Akodon sp. Ancash"
+\item Case-insensitive: ✅ "PANTHERA ONCA" or "panthera onca"
+}
+
+Names with 3+ elements will be automatically rejected with a warning.
 }
 \examples{
 

@@ -7,7 +7,7 @@ Authors@R:
              role = c("aut", "cre"),
              email = "paulefrens@gmail.com",
              comment = c(ORCID = "0000-0002-6635-0375")),
-      person(given = "Fiorella Nasha",
+      person(given = "Fiorella N.",
              family = "Gonzales Guillen",
              role = "ctb",
              email = "fngonzales@uc.cl",

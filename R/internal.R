@@ -134,6 +134,69 @@ check_backbone_update <- function(backbone_year) {
   }
 }
 
+#' Detect trinomial names (3+ taxonomic elements)
+#' @keywords internal
+.detect_trinomial <- function(orig_names) {
+  word_counts <- stringr::str_count(orig_names, "\\S+")
+  is_trinomial <- word_counts >= 3
+  has_sp_notation <- grepl("\\ssp\\.\\s", orig_names, ignore.case = TRUE)
+  is_trinomial <- is_trinomial & !has_sp_notation
+  return(is_trinomial)
+}
+
+#' Invalidate trinomial matches in validation results
+#' @keywords internal
+.invalidate_trinomials <- function(results) {
+  is_trinomial <- .detect_trinomial(results$Orig.Name)
+
+  if (!any(is_trinomial)) {
+    return(results)
+  }
+
+  trinomial_names <- results$Orig.Name[is_trinomial]
+  n_trinomial <- length(trinomial_names)
+
+  warning(
+    paste0(
+      "Found ", n_trinomial, " name(s) with 3+ elements (likely author info or infraspecies).\n",
+      "The peru_mammals database only accepts binomial names (Genus species).\n",
+      "Please provide names WITHOUT author information or infraspecific taxa.\n\n",
+      "Invalid names:\n",
+      paste(paste0("  - '", trinomial_names, "'"), collapse = "\n"),
+      "\n\nThese names have been marked as NOT FOUND.\n"
+    ),
+    call. = FALSE,
+    immediate. = TRUE
+  )
+
+  results_modified <- results |>
+    dplyr::mutate(
+      matched = dplyr::if_else(is_trinomial, FALSE, matched),
+      Matched.Name = dplyr::if_else(is_trinomial, "---", Matched.Name),
+      Matched.Genus = dplyr::if_else(is_trinomial, NA_character_, Matched.Genus),
+      Matched.Species = dplyr::if_else(is_trinomial, NA_character_, Matched.Species),
+      Matched.Rank = dplyr::if_else(is_trinomial, NA_integer_, Matched.Rank),
+      Match.Level = dplyr::if_else(
+        is_trinomial,
+        "Invalid: 3+ elements (remove author/infraspecies)",
+        Match.Level
+      ),
+      valid_rank = dplyr::if_else(is_trinomial, FALSE, valid_rank),
+      Comp.Rank = dplyr::if_else(is_trinomial, FALSE, Comp.Rank),
+      scientific_name = dplyr::if_else(is_trinomial, NA_character_, scientific_name),
+      common_name = dplyr::if_else(is_trinomial, NA_character_, common_name),
+      family = dplyr::if_else(is_trinomial, NA_character_, family),
+      order = dplyr::if_else(is_trinomial, NA_character_, order),
+      endemic = dplyr::if_else(is_trinomial, NA, endemic),
+      genus_dist = dplyr::if_else(is_trinomial, NA_integer_, genus_dist),
+      species_dist = dplyr::if_else(is_trinomial, NA_integer_, species_dist)
+    )
+
+  return(results_modified)
+}
+
+
+
 
 # variables interns
 

@@ -43,6 +43,21 @@
 #' issued and the first match is selected. Use \code{get_ambiguous_matches()}
 #' to examine these cases.
 #'
+#' **Input Requirements:**
+#'
+#' Species names must be provided as binomials (Genus species) WITHOUT:
+#' - Author information: ❌ "Panthera onca Linnaeus"
+#' - Infraspecific taxa: ❌ "Panthera onca onca"
+#' - Parenthetical authors: ❌ "Panthera onca (Linnaeus, 1758)"
+#'
+#' Valid formats:
+#' - Standard binomial: ✅ "Panthera onca"
+#' - Undescribed species: ✅ "Akodon sp. Ancash"
+#' - Case-insensitive: ✅ "PANTHERA ONCA" or "panthera onca"
+#'
+#' Names with 3+ elements will be automatically rejected with a warning.
+#'
+#'
 #' @return
 #' A tibble with the following columns:
 #' \describe{
@@ -229,6 +244,7 @@ validate_peru_mammals <- function(splist, quiet = TRUE) {
 
   .final_assertions_peru(splist_class, output)
 
+
   # ==========================================================================
   # SECTION 11: Attach Metadata and Summary Statistics
   # ==========================================================================
@@ -314,35 +330,41 @@ validate_peru_mammals <- function(splist, quiet = TRUE) {
     n_fuzzy_species = n_fuzzy_species
   )
 
-  # ==========================================================================
-  # SECTION 12: Final Summary Message
-  # ==========================================================================
+   # ==========================================================================
+   # SECTION 13: Invalidate Trinomial Names (NUEVA UBICACIÓN)
+   # ==========================================================================
 
-  if (!quiet) {
-    cli::cli_rule("MATCHING SUMMARY")
+   if (!quiet) {
+     cli::cli_h2("Validating name format")
+   }
 
-    cli::cli_h2("Statistics")
-    cli::cli_ul(c(
-      "Input names: {.val {nrow(splist_class)}}",
-      paste0(
-        "Matched names: {.val {n_matched}} ",
-        "({.emph {round(100 * n_matched / nrow(splist_class), 1)}%})"
-      ),
-      "Direct matches: {.val {nrow(pipe$n1_matched)}}",
-      "Unmatched names: {.val {nrow(splist_class) - n_matched}}"
-    ))
+   # Detectar y invalidar trinomiales (nombres con 3+ elementos)
+   output <- .invalidate_trinomials(output)
 
-    if (n_fuzzy_genus > 0 || n_fuzzy_species > 0) {
-      cli::cli_alert_warning(
-        "Fuzzy matching was used. Review results carefully."
-      )
-      cli::cli_alert_info(
-        "Use {.fn get_ambiguous_matches} to check for ambiguous cases."
-      )
-    }
+   # Recalcular n_matched después de invalidar trinomiales
+   n_matched <- sum(output$matched, na.rm = TRUE)
 
-    cli::cli_rule()
-  }
+   # ==========================================================================
+   # SECTION 14: Attach Metadata (renombrado)
+   # ==========================================================================
 
-  return(output)
-}
+   output <- .attach_metadata_peru(
+     output,
+     n_input = nrow(splist_class),
+     n_matched = n_matched,
+     n_fuzzy_genus = n_fuzzy_genus,
+     n_fuzzy_species = n_fuzzy_species
+   )
+
+   # ==========================================================================
+   # SECTION 15: Final Summary Message (renombrado)
+   # ==========================================================================
+
+   if (!quiet) {
+     cli::cli_rule("MATCHING SUMMARY")
+     # ... resto del código ...
+   }
+
+   return(output)
+ }
+

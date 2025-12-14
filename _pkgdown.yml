@@ -63,3 +63,6 @@ navbar:
       menu:
         - text: "Exploring mammal diversity in Peru"
           href: articles/vignette.html
+
+development:
+  mode: auto

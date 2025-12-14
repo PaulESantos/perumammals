@@ -14,15 +14,7 @@ Authors@R:
              comment = c(ORCID = "0000-0001-5240-2464")))
 Maintainer: Paul E. Santos Andrade <paulefrens@gmail.com>
 Description: 
-    Provides a curated taxonomic backbone of the mammal species of Peru 
-    based on Pacheco et al. (2021) "Lista actualizada de la diversidad de 
-    los mamiferos del Peru y una propuesta para su actualizacion". 
-    The package includes standardized species data, occurrence by 
-    ecoregions, endemism status, and tools for validating and matching 
-    scientific names through exact and fuzzy procedures. It is designed as 
-    a lightweight and dependable reference for ecological, environmental, 
-    biogeographic, and conservation workflows that require reliable species 
-    information for Peruvian mammals.
+    Provides a curated taxonomic backbone of the mammal species of Peru based on Pacheco et al. (2021) "Lista actualizada de la diversidad de los mamiferos del Peru y una propuesta para su actualizacion". The package includes standardized species data, occurrence by ecoregions, endemism status, and tools for validating and matching scientific names through exact and fuzzy procedures. It is designed as a lightweight and dependable reference for ecological, environmental, biogeographic, and conservation workflows that require reliable species information for Peruvian mammals.
 License: MIT + file LICENSE
 URL: https://github.com/PaulESantos/perumammals,
     https://paulesantos.github.io/perumammals/

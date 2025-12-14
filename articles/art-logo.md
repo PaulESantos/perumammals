@@ -11,7 +11,7 @@
 The perumammals logo is a hexagonal badge featuring a vibrant
 composition that celebrates Peru’s extraordinary mammalian diversity
 across its diverse ecoregions. The artwork showcases iconic Peruvian
-mammals in their characteristic habitats.
+mammals.
 
 ### Featured Species and Elements
 

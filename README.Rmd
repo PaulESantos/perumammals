@@ -21,7 +21,6 @@ Taxonomic backbone and name validation tools for the mammals of Peru.
 [![CRAN status](https://www.r-pkg.org/badges/version/perumammals)](https://CRAN.R-project.org/package=perumammals)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/perumammals?color=green)](https://cran.r-project.org/package=perumammals)
 [![](http://cranlogs.r-pkg.org/badges/last-week/perumammals?color=green)](https://cran.r-project.org/package=perumammals)
-[![Codecov test coverage](https://codecov.io/gh/PaulESantos/perumammals/branch/main/graph/badge.svg)](https://app.codecov.io/gh/PaulESantos/perumammals?branch=main)
 [![R-CMD-check](https://github.com/PaulESantos/perumammals/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/PaulESantos/perumammals/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
@@ -62,7 +61,7 @@ The backbone included in **perumammals** is derived directly from the annex of *
 - Includes both **terrestrial and marine** mammals.
 - Peru ranks among the most mammal-diverse countries worldwide.
 
-```{r echo=FALSE, warning=FALSE, message=FALSE}
+```{r echo=FALSE, warning=FALSE, message=FALSE, fig.alt="."}
 library(dplyr)
 library(ggplot2)
 library(forcats)
@@ -102,7 +101,7 @@ ggplot(data_order_diversity, aes(x = order, y = n_species)) +
 - **87 species** are recognized as **endemic to Peru**, emphasizing the country’s importance for global mammalian conservation.
 
 
-```{r echo=FALSE}
+```{r echo=FALSE, fig.alt="."}
 
 library(dplyr)
 library(ggplot2)

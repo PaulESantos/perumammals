@@ -13,8 +13,6 @@ stable](https://img.shields.io/badge/lifecycle-stable-blue.svg)](https://lifecyc
 status](https://www.r-pkg.org/badges/version/perumammals)](https://CRAN.R-project.org/package=perumammals)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/perumammals?color=green)](https://cran.r-project.org/package=perumammals)
 [![](http://cranlogs.r-pkg.org/badges/last-week/perumammals?color=green)](https://cran.r-project.org/package=perumammals)
-[![Codecov test
-coverage](https://codecov.io/gh/PaulESantos/perumammals/branch/main/graph/badge.svg)](https://app.codecov.io/gh/PaulESantos/perumammals?branch=main)
 [![R-CMD-check](https://github.com/PaulESantos/perumammals/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/PaulESantos/perumammals/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
@@ -70,14 +68,14 @@ work with the most current classification.
 - Includes both **terrestrial and marine** mammals.
 - Peru ranks among the most mammal-diverse countries worldwide.
 
-<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-2-1.png" alt="." width="100%" />
 
 ### Endemism
 
 - **87 species** are recognized as **endemic to Peru**, emphasizing the
   country’s importance for global mammalian conservation.
 
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-3-1.png" alt="." width="100%" />
 
 ### Biogeographic Ecoregions
 

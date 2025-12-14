@@ -50,7 +50,7 @@ glimpse(peru_mammals)
 
 ### Orders and Species Richness
 
-```{r orders-diversity, fig.width=8, fig.height=6, out.width="100%", fig.align="center"}
+```{r orders-diversity, fig.width=8, fig.height=6, out.width="100%", fig.align="center", fig.alt="."}
 order_summary <- pm_list_orders() |> 
   dplyr::arrange(dplyr::desc(n_species)) |> 
   dplyr::mutate(percentage = round(n_species / sum(n_species) * 100, 1))
@@ -87,7 +87,7 @@ pm_list_endemic(include_rate = TRUE)
 
 ### Ecoregional Diversity
 
-```{r ecoregions, fig.width=10, fig.height=12, out.width="100%", fig.align="center"}
+```{r ecoregions, fig.width=10, fig.height=12, out.width="100%", fig.align="center", fig.alt="."}
 
 ecoregion_diversity <- pm_list_ecoregions(include_endemic = TRUE)
 ecoregion_diversity

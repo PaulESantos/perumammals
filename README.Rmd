@@ -53,9 +53,7 @@ but to provide a **stable, Peruvian-focused backbone** and a set of **reproducib
 
 ## Context from Pacheco et al. (2021)
 
-The backbone included in **perumammals** is derived directly from the annex of  
-Pacheco et al. (2021), who synthesized decades of Peruvian mammalogy work.
-Key highlights from the publication include:
+The backbone included in **perumammals** is derived directly from the annex of **Pacheco et al. (2021)**, who synthesized decades of Peruvian mammalogy work. This list is highly relevant as it incorporates recent taxonomic updates up to November 2021, including the description of species new to science (e.g., Thomasomys antoniobracki, Oligoryzomys guille), the first Peruvian records for some bats (Eumops bonariensis), and species re-validations (e.g., Neacomys carceleni), ensuring users work with the most current classification.
 
 ### Mammalian Diversity
 
@@ -64,30 +62,113 @@ Key highlights from the publication include:
 - Includes both **terrestrial and marine** mammals.
 - Peru ranks among the most mammal-diverse countries worldwide.
 
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+library(dplyr)
+library(ggplot2)
+library(forcats)
+library(perumammals)
+
+# Assuming the main package dataset is 'peru_mammals'
+data_order_diversity <- perumammals::peru_mammals |> 
+  # Group by the 'Order' taxonomic field
+  dplyr::group_by(order) |> 
+  dplyr::summarise(n_species = n()) |> 
+  dplyr::ungroup() |> 
+  # Order the factors by species count for plotting
+  dplyr::mutate(order = forcats::fct_reorder(order, n_species))
+
+# Generate the plot using ggplot2
+ggplot(data_order_diversity, aes(x = order, y = n_species)) +
+  geom_bar(stat = "identity", fill = "#3182bd") +
+  coord_flip() + # Horizontal bars for better long name readability
+  labs(
+    title = "Mammal Diversity of Peru by Taxonomic Order",
+    subtitle = "Source: Pacheco et al. (2021). Total: 573 species.",
+    x = "",
+    y = "Number of Species"
+  ) +
+  theme_minimal() +
+  # Add text labels for values
+  geom_text(aes(label = n_species), hjust = -0.1, size = 3.5, color = "black") +
+  # Adjust Y-axis limit to fit labels
+  scale_y_continuous(limits = c(0, max(data_order_diversity$n_species) * 1.1)) +
+  theme(plot.title = element_text(face = "bold"))
+
+```
+
+
 ### Endemism
 
 - **87 species** are recognized as **endemic to Peru**, emphasizing the country’s importance for global mammalian conservation.
 
-- Several endemics are narrow-ranged and associated with specific ecoregions 
-  such as the Yungas, Páramo, and Puna.
+
+```{r echo=FALSE}
+
+library(dplyr)
+library(ggplot2)
+library(forcats)
+library(scales) 
+  
+# Get the list of endemic species names
+  endemic_names <- pm_endemics() |> 
+    dplyr::pull(scientific_name)
+  
+  endemic_percent <- peru_mammals_ecoregions |> 
+    dplyr::mutate(
+      Endemic_Status = ifelse(scientific_name %in% endemic_names, "Endemic", "Non-Endemic")
+    ) |> 
+    dplyr::group_by(ecoregion_code, Endemic_Status) |> 
+    dplyr::summarise(Count = n_distinct(scientific_name), .groups = 'drop') |> 
+    dplyr::left_join(peru_mammals_ecoregions_meta, by = "ecoregion_code") |> 
+    dplyr::group_by(ecoregion_label) |> 
+    dplyr::mutate(
+      Total_Count = sum(Count),
+      Proportion = Count / Total_Count,
+      Label_Text = scales::percent(Proportion, accuracy = 0.1)
+    ) |> 
+    dplyr::ungroup() |> 
+    dplyr::mutate(
+      ecoregion_label = forcats::fct_reorder(ecoregion_label, Total_Count)
+    ) 
+  
+  # Generate the stacked percentage bar plot
+  
+ggplot(endemic_percent, 
+       aes(x = ecoregion_label, y = Count, fill = Endemic_Status)) +
+    geom_bar(stat = "identity", position = "fill") +
+    coord_flip() +
+    scale_y_continuous(labels = scales::percent) + 
+    scale_fill_manual(
+      values = c("Endemic" = "#e34a33", "Non-Endemic" = "#cccccc"),
+      name = ""
+    ) +
+    geom_text(
+      aes(label = Label_Text),
+      position = position_fill(vjust = 0.5), 
+      size = 3.5,
+      color = "black" 
+    ) +
+    labs(
+      title = "Proportion of Endemic Mammal Species by Ecoregion",
+      x = "",
+      y = "Species Proportion (%)"
+    ) +
+    theme_minimal() +
+    theme(plot.title = element_text(face = "bold"),
+          legend.position = "bottom")
+  
+
+```
+
 
 ### Biogeographic Ecoregions
 
 The article assigns each species to one or more Peruvian ecoregions using 
 the classification widely used in biogeography and conservation planning:
 
-| Code | Ecoregion |
-|------|-------------------------------|
-| OCE | Oceánica |
-| BPP | Bosque Pluvial del Pacífico |
-| BSE | Bosque Seco Ecuatorial |
-| COS | Costa |
-| VOC | Vertiente Occidental |
-| PAR | Páramo |
-| PUN | Puna |
-| YUN | Yungas |
-| SB  | Selva Baja |
-| SP  | Sabana de Palmera |
+```{r echo=FALSE}
+pm_list_ecoregions()
+```
 
 These codes are incorporated into the package as both:
 
@@ -142,6 +223,22 @@ Metadata describing:
 
 These datasets make `perumammals` a lightweight but powerful reference for any
 workflow requiring curated and Peruvian-focused mammal information.
+
+
+### Core Functions and Name Validation
+
+| Category | Functionality | Conceptual Code Example |
+|----------|---------------|-------------------------|
+| Name Validation | Validate species names against database | `validate_peru_mammals(c("Thomasomys notatus", "Tapirus terrestris", "Unknown species"))` |
+| Quick Checks | Check if species occurs in Peru | `is_peru_mammal("Tremarctos ornatus")` |
+| Endemism Query | Check endemic status | `is_endemic_peru("Thomasomys notatus")` |
+| Match Quality | Get validation match level | `match_quality_peru("Puma concolar")` |
+| Family Summary | List families with species counts | `pm_list_families()` |
+| Family Filter | Filter by specific family | `pm_species(family = "Cricetidae")` |
+| Endemic Analysis | List endemic species statistics | `pm_list_endemic()` |
+| Endemic by Family | Filter endemics by family | `pm_endemics(family = "Phyllostomidae")` |
+| Endemic by Ecoregion | Filter endemics by ecoregion | `pm_by_ecoregion(ecoregion = "YUN", endemic = TRUE)` |
+
 
 ---
 

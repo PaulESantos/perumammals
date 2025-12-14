@@ -56,7 +56,7 @@ navbar:
   components:
     intro:
       text: "Get started"
-      href: articles/vignette.html
+      href: articles/getting_started.html
 
     articles:
       text: "Articles"

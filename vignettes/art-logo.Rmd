@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 
 ## Package Logo
 ```{r logo, echo=FALSE, out.width="50%", fig.align='center', fig.alt="."}
-knitr::include_graphics("D:/perumammals/man/figures/logo_perumammals.png")
+knitr::include_graphics("../man/figures/logo_perumammals.png")
 ```
 
 **Artwork by:** Ismael Silva

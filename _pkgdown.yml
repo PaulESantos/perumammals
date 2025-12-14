@@ -58,6 +58,8 @@ navbar:
       menu:
       - text: Exploring mammal diversity in Peru
         href: articles/vignette.html
+      - text: Art perumammalas
+        href: articles/art-logo.html
 development:
   mode: release
 

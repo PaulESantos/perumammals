@@ -17,8 +17,7 @@ knitr::opts_chunk$set(
 library(perumammals)
 library(dplyr)
 library(ggplot2)
-library(waffle)
-library(ggtext)
+library(tidyr)
 ```
 
 ## Introduction
@@ -89,37 +88,31 @@ pm_list_endemic(include_rate = TRUE)
 
 ```{r ecoregions, fig.width=10, fig.height=12, out.width="100%", fig.align="center", fig.alt="."}
 
+# Obtener datos de ecoregiones
 ecoregion_diversity <- pm_list_ecoregions(include_endemic = TRUE)
-ecoregion_diversity
 
-library(ggtext)
-
+# Preparar datos para el gráfico tipo waffle
 waffle_data <- ecoregion_diversity |> 
-  dplyr::select(ecoregion_label, pct_endemic) |> 
-  dplyr::mutate(
-    Endemic = round(pct_endemic),
-    Common = 100 - Endemic
-  ) |> 
-  tidyr::pivot_longer(
-    cols = c("Endemic", "Common"),
-    names_to = "type",
-    values_to = "percentage"
-  ) |> 
-  dplyr::group_by(ecoregion_label) |> 
-  dplyr::mutate(
+  select(ecoregion_label, pct_endemic) |> 
+  mutate(
     total_pct = paste0(round(pct_endemic, 1), "% endemic"),
     ecoregion_full = paste0(ecoregion_label, "\n", total_pct)
   ) |> 
-  dplyr::ungroup()
+  rowwise() |> 
+  mutate(
+    grid_data = list(
+      expand.grid(x = 1:10, y = 1:10) |> 
+        mutate(
+          id = row_number(),
+          type = ifelse(id <= round(pct_endemic), "Endemic", "Common")
+        )
+    )
+  ) |> 
+  unnest(grid_data)
 
-ggplot(waffle_data, aes(fill = type, values = percentage)) +
-  geom_waffle(
-    n_rows = 10,
-    size = 0.4,
-    colour = "white",
-    flip = TRUE,
-    radius = unit(2, "pt")
-  ) +
+# Crear el gráfico
+ggplot(waffle_data, aes(x = x, y = y, fill = type)) +
+  geom_tile(color = "white", linewidth = 0.4) +
   facet_wrap(~ecoregion_full, ncol = 2) +
   scale_fill_manual(
     name = NULL,
@@ -153,11 +146,12 @@ ggplot(waffle_data, aes(fill = type, values = percentage)) +
       size = 9,
       face = "bold", 
       lineheight = 1.1,
-      margin = margin(t = 2, b = 2)  # Márgenes MÍNIMOS
+      margin = margin(t = 5, b = 5)  # Aumentar márgenes
     ),
+    strip.clip = "off",  # Permitir que el texto se extienda fuera del panel
     plot.background = element_rect(fill = "white", color = NA),
-    panel.spacing.x = unit(1.5, "lines"),
-    panel.spacing.y = unit(1, "lines"),  # Reducir espacio vertical
+    panel.spacing.x = unit(2, "lines"),  # Aumentar espacio horizontal
+    panel.spacing.y = unit(2.5, "lines"),  # Aumentar espacio vertical
     plot.margin = margin(15, 15, 15, 15)
   )
 

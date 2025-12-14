@@ -42,7 +42,6 @@ Suggests:
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
-    waffle,
     tidyr,
     ggtext
 VignetteBuilder: knitr

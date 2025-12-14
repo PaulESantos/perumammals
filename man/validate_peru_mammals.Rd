@@ -101,16 +101,16 @@ to examine these cases.
 
 Species names must be provided as binomials (Genus species) WITHOUT:
 \itemize{
-\item Author information: ❌ "Panthera onca Linnaeus"
-\item Infraspecific taxa: ❌ "Panthera onca onca"
-\item Parenthetical authors: ❌ "Panthera onca (Linnaeus, 1758)"
+\item Author information: Panthera onca Linnaeus"
+\item Infraspecific taxa: "Panthera onca onca"
+\item Parenthetical authors: "Panthera onca (Linnaeus, 1758)"
 }
 
 Valid formats:
 \itemize{
-\item Standard binomial: ✅ "Panthera onca"
-\item Undescribed species: ✅ "Akodon sp. Ancash"
-\item Case-insensitive: ✅ "PANTHERA ONCA" or "panthera onca"
+\item Standard binomial: "Panthera onca"
+\item Undescribed species: "Akodon sp. Ancash"
+\item Case-insensitive: "PANTHERA ONCA" or "panthera onca"
 }
 
 Names with 3+ elements will be automatically rejected with a warning.

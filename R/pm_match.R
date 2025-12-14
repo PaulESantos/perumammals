@@ -46,14 +46,14 @@
 #' **Input Requirements:**
 #'
 #' Species names must be provided as binomials (Genus species) WITHOUT:
-#' - Author information: ❌ "Panthera onca Linnaeus"
-#' - Infraspecific taxa: ❌ "Panthera onca onca"
-#' - Parenthetical authors: ❌ "Panthera onca (Linnaeus, 1758)"
+#' - Author information: Panthera onca Linnaeus"
+#' - Infraspecific taxa: "Panthera onca onca"
+#' - Parenthetical authors: "Panthera onca (Linnaeus, 1758)"
 #'
 #' Valid formats:
-#' - Standard binomial: ✅ "Panthera onca"
-#' - Undescribed species: ✅ "Akodon sp. Ancash"
-#' - Case-insensitive: ✅ "PANTHERA ONCA" or "panthera onca"
+#' - Standard binomial: "Panthera onca"
+#' - Undescribed species: "Akodon sp. Ancash"
+#' - Case-insensitive: "PANTHERA ONCA" or "panthera onca"
 #'
 #' Names with 3+ elements will be automatically rejected with a warning.
 #'

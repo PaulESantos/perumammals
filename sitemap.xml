@@ -5,6 +5,7 @@
 <url><loc>https://paulesantos.github.io/perumammals/LICENSE-text.html</loc></url>
 <url><loc>https://paulesantos.github.io/perumammals/LICENSE.html</loc></url>
 <url><loc>https://paulesantos.github.io/perumammals/SUPPORT.html</loc></url>
+<url><loc>https://paulesantos.github.io/perumammals/articles/getting_started.html</loc></url>
 <url><loc>https://paulesantos.github.io/perumammals/articles/index.html</loc></url>
 <url><loc>https://paulesantos.github.io/perumammals/articles/vignette.html</loc></url>
 <url><loc>https://paulesantos.github.io/perumammals/authors.html</loc></url>
@@ -19,12 +20,14 @@
 <url><loc>https://paulesantos.github.io/perumammals/reference/dot-combine_unmatched_nodes_peru.html</loc></url>
 <url><loc>https://paulesantos.github.io/perumammals/reference/dot-compute_matched_rank_peru.html</loc></url>
 <url><loc>https://paulesantos.github.io/perumammals/reference/dot-consolidate_ambiguous_attrs_peru.html</loc></url>
+<url><loc>https://paulesantos.github.io/perumammals/reference/dot-detect_trinomial.html</loc></url>
 <url><loc>https://paulesantos.github.io/perumammals/reference/dot-empty_output_peru.html</loc></url>
 <url><loc>https://paulesantos.github.io/perumammals/reference/dot-final_assertions_peru.html</loc></url>
 <url><loc>https://paulesantos.github.io/perumammals/reference/dot-finalize_output_peru.html</loc></url>
 <url><loc>https://paulesantos.github.io/perumammals/reference/dot-format_matched_names_peru.html</loc></url>
 <url><loc>https://paulesantos.github.io/perumammals/reference/dot-get_mammals_genus.html</loc></url>
 <url><loc>https://paulesantos.github.io/perumammals/reference/dot-init_matching_columns_peru.html</loc></url>
+<url><loc>https://paulesantos.github.io/perumammals/reference/dot-invalidate_trinomials.html</loc></url>
 <url><loc>https://paulesantos.github.io/perumammals/reference/dot-join_database_info_peru.html</loc></url>
 <url><loc>https://paulesantos.github.io/perumammals/reference/dot-load_target_peru.html</loc></url>
 <url><loc>https://paulesantos.github.io/perumammals/reference/dot-map_dfr_progress.html</loc></url>
@@ -59,6 +62,7 @@
 <url><loc>https://paulesantos.github.io/perumammals/reference/pm_ecoregion_summary.html</loc></url>
 <url><loc>https://paulesantos.github.io/perumammals/reference/pm_endemics.html</loc></url>
 <url><loc>https://paulesantos.github.io/perumammals/reference/pm_list_ecoregions.html</loc></url>
+<url><loc>https://paulesantos.github.io/perumammals/reference/pm_list_endemic.html</loc></url>
 <url><loc>https://paulesantos.github.io/perumammals/reference/pm_list_families.html</loc></url>
 <url><loc>https://paulesantos.github.io/perumammals/reference/pm_list_genera.html</loc></url>
 <url><loc>https://paulesantos.github.io/perumammals/reference/pm_list_orders.html</loc></url>

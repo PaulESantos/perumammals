@@ -182,6 +182,26 @@ match scores, a warning is issued and the first match is selected. Use
 [`get_ambiguous_matches()`](https://paulesantos.github.io/perumammals/reference/get_ambiguous_matches.md)
 to examine these cases.
 
+**Input Requirements:**
+
+Species names must be provided as binomials (Genus species) WITHOUT:
+
+- Author information: ❌ "Panthera onca Linnaeus"
+
+- Infraspecific taxa: ❌ "Panthera onca onca"
+
+- Parenthetical authors: ❌ "Panthera onca (Linnaeus, 1758)"
+
+Valid formats:
+
+- Standard binomial: ✅ "Panthera onca"
+
+- Undescribed species: ✅ "Akodon sp. Ancash"
+
+- Case-insensitive: ✅ "PANTHERA ONCA" or "panthera onca"
+
+Names with 3+ elements will be automatically rejected with a warning.
+
 ## See also
 
 [`get_ambiguous_matches`](https://paulesantos.github.io/perumammals/reference/get_ambiguous_matches.md)
@@ -190,34 +210,58 @@ to retrieve ambiguous match details
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
 # Basic usage
 species_list <- c("Panthera onca", "Tremarctos ornatus", "Puma concolor")
 results <- validate_peru_mammals(species_list)
 
 # Check results
 table(results$matched)
+#> 
+#> TRUE 
+#>    3 
 table(results$Match.Level)
+#> 
+#> Exact rank 
+#>          3 
 
 # View matched species
 results |>
-  filter(matched) |>
-  select(Orig.Name, Matched.Name, common_name, endemic)
+  dplyr::filter(matched) |>
+  dplyr::select(Orig.Name, Matched.Name, common_name, endemic)
+#>            Orig.Name       Matched.Name                     common_name endemic
+#> 1      Panthera onca      Panthera onca      Jaguar, otorongo, uturuncu   FALSE
+#> 2 Tremarctos ornatus Tremarctos ornatus Oso de anteojos, ucumari, ucucu   FALSE
+#> 3      Puma concolor      Puma concolor        Puma, león, lluichu-puma   FALSE
 
 # With typos (fuzzy matching)
 typos <- c("Pumma concolor", "Tremarctos ornatu")  # Spelling errors
 results_fuzzy <- validate_peru_mammals(typos, quiet = FALSE)
+#> Loaded peru_mammals database: 573 species
+#> Classified 2 input names
+#>   Rank 1 (genus): 0
+#>   Rank 2 (binomial): 2
+#> 
+#> Starting hierarchical matching pipeline...
+#> Node 2 (Genus match): 1 matches
+#> Node 3 (Fuzzy genus): 1 matches
+#> Node 4 (Fuzzy species): 2 matches
+#> 
+#> ── Validating name format ──
+#> 
+#> ── MATCHING SUMMARY ────────────────────────────────────────────────────────────
 
 # Check for ambiguous matches
 get_ambiguous_matches(results_fuzzy, type = "genus")
+#> No ambiguous genus matches found.
 
 # Access metadata
 attr(results, "match_rate")
+#> [1] 100
 attr(results, "n_fuzzy_genus")
+#> [1] 0
 
 # With special "sp." cases
 sp_cases <- c("Akodon sp. Ancash", "Oligoryzomys sp. B")
 results_sp <- validate_peru_mammals(sp_cases)
 # Should match exactly
-} # }
 ```

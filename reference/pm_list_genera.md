@@ -125,8 +125,4 @@ pm_list_genera(order = "Chiroptera", family = "Phyllostomidae")
 #> 10 Chiroptera Phyllostomidae Enchisthenes         1         0
 #> # ℹ 28 more rows
 
-# Invalid input generates warning
-if (FALSE) { # \dontrun{
-pm_list_genera(order = "InvalidOrder")
-} # }
 ```

@@ -2,8 +2,9 @@ pandoc: 3.1.11
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
+  getting_started: getting_started.html
   vignette: vignette.html
-last_built: 2025-12-10T04:46Z
+last_built: 2025-12-14T16:16Z
 urls:
   reference: https://paulesantos.github.io/perumammals/reference
   article: https://paulesantos.github.io/perumammals/articles

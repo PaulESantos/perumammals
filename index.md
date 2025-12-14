@@ -1,4 +1,4 @@
-# perumammals ![](reference/figures/logo.png)
+# perumammals ![](reference/figures/logo_perumammals.png)
 
 Taxonomic backbone and name validation tools for the mammals of Peru.
 
@@ -39,9 +39,13 @@ environmental, biogeographic and conservation workflows.
 ## Context from Pacheco et al. (2021)
 
 The backbone included in **perumammals** is derived directly from the
-annex of  
-Pacheco et al. (2021), who synthesized decades of Peruvian mammalogy
-work. Key highlights from the publication include:
+annex of **Pacheco et al. (2021)**, who synthesized decades of Peruvian
+mammalogy work. This list is highly relevant as it incorporates recent
+taxonomic updates up to November 2021, including the description of
+species new to science (e.g., Thomasomys antoniobracki, Oligoryzomys
+guille), the first Peruvian records for some bats (Eumops bonariensis),
+and species re-validations (e.g., Neacomys carceleni), ensuring users
+work with the most current classification.
 
 ### Mammalian Diversity
 
@@ -50,13 +54,14 @@ work. Key highlights from the publication include:
 - Includes both **terrestrial and marine** mammals.
 - Peru ranks among the most mammal-diverse countries worldwide.
 
+![.](reference/figures/README-unnamed-chunk-2-1.png)
+
 ### Endemism
 
 - **87 species** are recognized as **endemic to Peru**, emphasizing the
   country’s importance for global mammalian conservation.
 
-- Several endemics are narrow-ranged and associated with specific
-  ecoregions such as the Yungas, Páramo, and Puna.
+![.](reference/figures/README-unnamed-chunk-3-1.png)
 
 ### Biogeographic Ecoregions
 
@@ -64,18 +69,28 @@ The article assigns each species to one or more Peruvian ecoregions
 using the classification widely used in biogeography and conservation
 planning:
 
-| Code | Ecoregion                   |
-|------|-----------------------------|
-| OCE  | Oceánica                    |
-| BPP  | Bosque Pluvial del Pacífico |
-| BSE  | Bosque Seco Ecuatorial      |
-| COS  | Costa                       |
-| VOC  | Vertiente Occidental        |
-| PAR  | Páramo                      |
-| PUN  | Puna                        |
-| YUN  | Yungas                      |
-| SB   | Selva Baja                  |
-| SP   | Sabana de Palmera           |
+``` R
+#> ── Peruvian Mammal Ecoregions (Brack-Egg, 1986) ─────────────────────────────────────────────────────────────────────
+#> ℹ Number of ecoregions: 10
+#> ℹ Total mammal species in Peru: 573
+#> 
+#> Ecoregions by species richness:
+#> 
+#> SB - Selva Baja: 320 species (55.8%)
+#> YUN - Yungas: 256 species (44.7%)
+#> SP - Sabana de Palmera: 83 species (14.5%)
+#> BSE - Bosque Seco Ecuatorial: 81 species (14.1%)
+#> VOC - Vertiente Occidental: 72 species (12.6%)
+#> PUN - Puna: 71 species (12.4%)
+#> BPP - Bosque Pluvial del Pacífico: 69 species (12%)
+#> COS - Costa: 66 species (11.5%)
+#> OCE - Oceánica: 30 species (5.2%)
+#> PAR - Páramo: 26 species (4.5%)
+#> 
+#> Use pm_by_ecoregion() to filter species by ecoregion
+#> Use include_endemic = TRUE to see endemic species counts
+#> ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+```
 
 These codes are incorporated into the package as both:
 
@@ -138,6 +153,20 @@ These datasets make `perumammals` a lightweight but powerful reference
 for any workflow requiring curated and Peruvian-focused mammal
 information.
 
+### Core Functions and Name Validation
+
+| Category             | Functionality                           | Conceptual Code Example                                                                         |
+|----------------------|-----------------------------------------|-------------------------------------------------------------------------------------------------|
+| Name Validation      | Validate species names against database | `validate_peru_mammals(c("Thomasomys notatus", "Tapirus terrestris", "Unknown species"))`       |
+| Quick Checks         | Check if species occurs in Peru         | `is_peru_mammal("Tremarctos ornatus")`                                                          |
+| Endemism Query       | Check endemic status                    | `is_endemic_peru("Thomasomys notatus")`                                                         |
+| Match Quality        | Get validation match level              | `match_quality_peru("Puma concolar")`                                                           |
+| Family Summary       | List families with species counts       | [`pm_list_families()`](https://paulesantos.github.io/perumammals/reference/pm_list_families.md) |
+| Family Filter        | Filter by specific family               | `pm_species(family = "Cricetidae")`                                                             |
+| Endemic Analysis     | List endemic species statistics         | [`pm_list_endemic()`](https://paulesantos.github.io/perumammals/reference/pm_list_endemic.md)   |
+| Endemic by Family    | Filter endemics by family               | `pm_endemics(family = "Phyllostomidae")`                                                        |
+| Endemic by Ecoregion | Filter endemics by ecoregion            | `pm_by_ecoregion(ecoregion = "YUN", endemic = TRUE)`                                            |
+
 ------------------------------------------------------------------------
 
 ## Installation
@@ -158,11 +187,20 @@ If you use this package, please cite:
 The package:
 
 ``` r
-Santos Andrade, P. E. (2025). perumammals: Taxonomic Backbone and Name Validation Tools for Mammals of Peru.
-R package version 0.0.0.1.
-https://paulesantos.github.io/perumammals/
 
-And the original taxonomic source:
-
-Pacheco, V., Cadenillas, R., Zeballos, H., Hurtado, C. M., Ruelas, D., & Pari, A. (2021). Lista actualizada de la diversidad de los mamíferos del Perú y una propuesta para su actualización.
+citation("perumammals")
+#> To cite perumammals in publications, please use:
+#> 
+#>   Santos Andrade, P. E., & Gonzales Guillen, F. N. (2025). perumammals: Taxonomic Backbone and Name
+#>   Validation Tools for Mammals of Peru. R package version 0.0.0.1.
+#>   https://paulesantos.github.io/perumammals/
+#> 
+#> The taxonomic backbone included in this package is based on:
+#> 
+#> Pacheco, V., Cadenillas, R., Zeballos, H., Hurtado, C. M., Ruelas, D., & Pari, A. (2021). Lista
+#> actualizada de la diversidad de los mamíferos del Perú y una propuesta para su actualización. Revista
+#> Peruana de Biología, 28(special issue), e21019. https://doi.org/10.15381/rpb.v28i4.21019
+#> 
+#> To see these entries in BibTeX format, use 'print(<citation>, bibtex=TRUE)', 'toBibtex(.)', or set
+#> 'options(citation.bibtex.max=999)'.
 ```

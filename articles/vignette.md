@@ -51,31 +51,34 @@ glimpse(peru_mammals)
 ### Orders and Species Richness
 
 ``` r
-order_summary <- peru_mammals %>%
-  count(order, sort = TRUE) %>%
-  mutate(percentage = round(n / sum(n) * 100, 1))
+order_summary <- pm_list_orders() |> 
+  dplyr::arrange(dplyr::desc(n_species)) |> 
+  dplyr::mutate(percentage = round(n_species / sum(n_species) * 100, 1))
 
 order_summary
-#> # A tibble: 13 × 3
-#>    order                n percentage
-#>    <chr>            <int>      <dbl>
-#>  1 Rodentia           194       33.9
-#>  2 Chiroptera         189       33  
-#>  3 Didelphimorphia     47        8.2
-#>  4 Artiodactyla        46        8  
-#>  5 Primates            42        7.3
-#>  6 Carnivora           33        5.8
-#>  7 Pilosa               7        1.2
-#>  8 Cingulata            5        0.9
-#>  9 Eulipotyphla         3        0.5
-#> 10 Lagomorpha           2        0.3
-#> 11 Paucituberculata     2        0.3
-#> 12 Perissodactyla       2        0.3
-#> 13 Sirenia              1        0.2
+#> # A tibble: 13 × 6
+#>    order            n_families n_genera n_species n_endemic percentage
+#>    <chr>                 <int>    <int>     <int>     <int>      <dbl>
+#>  1 Rodentia                 11       67       194        56       33.9
+#>  2 Chiroptera                8       64       189         9       33  
+#>  3 Didelphimorphia           1       15        47        10        8.2
+#>  4 Artiodactyla             10       31        46         0        8  
+#>  5 Primates                  3       12        42         9        7.3
+#>  6 Carnivora                 7       20        33         0        5.8
+#>  7 Pilosa                    4        5         7         0        1.2
+#>  8 Cingulata                 2        3         5         1        0.9
+#>  9 Eulipotyphla              1        1         3         2        0.5
+#> 10 Lagomorpha                1        1         2         0        0.3
+#> 11 Paucituberculata          1        2         2         0        0.3
+#> 12 Perissodactyla            1        1         2         0        0.3
+#> 13 Sirenia                   1        1         1         0        0.2
 
-ggplot(order_summary, aes(x = reorder(order, n), y = n)) +
+ggplot(order_summary, 
+       aes(x = reorder(order, n_species),
+           y = n_species)) +
   geom_col(fill = "steelblue") +
-  geom_text(aes(label = n), hjust = -0.2, size = 3) +
+  geom_text(aes(label = n_species),
+            hjust = -0.2, size = 3) +
   coord_flip() +
   labs(
     title = "Mammalian Diversity in Peru by Order",
@@ -86,7 +89,7 @@ ggplot(order_summary, aes(x = reorder(order, n), y = n)) +
   theme_minimal()
 ```
 
-![](vignette_files/figure-html/orders-diversity-1.png)
+![.](vignette_files/figure-html/orders-diversity-1.png)
 
 **Rodentia** (194 species) and **Chiroptera** (189 species) together
 account for nearly **67%** of Peru’s mammalian diversity.
@@ -94,41 +97,24 @@ account for nearly **67%** of Peru’s mammalian diversity.
 ## Endemic Species
 
 ``` r
-endemic_summary <- peru_mammals %>%
-  filter(endemic == TRUE) %>%
-  count(order, sort = TRUE)
-
-endemic_summary
-#> # A tibble: 6 × 2
-#>   order               n
-#>   <chr>           <int>
-#> 1 Rodentia           56
-#> 2 Didelphimorphia    10
-#> 3 Chiroptera          9
-#> 4 Primates            9
-#> 5 Eulipotyphla        2
-#> 6 Cingulata           1
-
-endemism_rate <- peru_mammals %>%
-  group_by(order) %>%
-  summarise(
-    total = n(),
-    endemic = sum(endemic == TRUE),
-    endemic_pct = round(endemic / total * 100, 1)
-  ) %>%
-  filter(endemic > 0) %>%
-  arrange(desc(endemic_pct))
-
-endemism_rate
-#> # A tibble: 6 × 4
-#>   order           total endemic endemic_pct
-#>   <chr>           <int>   <int>       <dbl>
-#> 1 Eulipotyphla        3       2        66.7
-#> 2 Rodentia          194      56        28.9
-#> 3 Primates           42       9        21.4
-#> 4 Didelphimorphia    47      10        21.3
-#> 5 Cingulata           5       1        20  
-#> 6 Chiroptera        189       9         4.8
+pm_list_endemic(include_rate = TRUE)
+#> # A tibble: 14 × 7
+#>    order        n_families n_genera n_endemic n_species endemic_rate endemic_pct
+#>    <chr>             <int>    <int>     <int>     <int>        <dbl>       <dbl>
+#>  1 Rodentia             11       67        56       194       0.289         28.9
+#>  2 Chiroptera            8       64         9       189       0.0476         4.8
+#>  3 Didelphimor…          1       15        10        47       0.213         21.3
+#>  4 Artiodactyla         10       31         0        46       0              0  
+#>  5 Primates              3       12         9        42       0.214         21.4
+#>  6 Carnivora             7       20         0        33       0              0  
+#>  7 Pilosa                4        5         0         7       0              0  
+#>  8 Cingulata             2        3         1         5       0.2           20  
+#>  9 Eulipotyphla          1        1         2         3       0.667         66.7
+#> 10 Lagomorpha            1        1         0         2       0              0  
+#> 11 Paucituberc…          1        2         0         2       0              0  
+#> 12 Perissodact…          1        1         0         2       0              0  
+#> 13 Sirenia               1        1         0         1       0              0  
+#> 14 Total                16       43        87       573       0.152         15.2
 ```
 
 **Rodentia** contains the largest number of endemic species (56),
@@ -140,52 +126,94 @@ representing **64.4%** of all mammalian endemics in Peru.
 
 ``` r
 
-ecoregion_diversity <- tribble(
-  ~ecoregion, ~species, ~endemics,
-  "Selva Baja", 320, 18,
-  "Yungas", 256, 48,
-  "Sabana de Palmeras", 78, 0,
-  "Puna", 71, 14,
-  "Vertiente Occidental", 71, 15,
-  "Bosque Seco Ecuatorial", 81, 4,
-  "Bosque Pluvial Pacífico", 69, 0,
-  "Costa", 66, 16,
-  "Oceánica", 30, 0,
-  "Páramo", 26, 4
-) |>
-  mutate(
-    has_endemics = endemics > 0,
-    ecoregion = factor(ecoregion, levels = ecoregion[order(species)])
-  )
+# Obtener datos de ecoregiones
+ecoregion_diversity <- pm_list_ecoregions(include_endemic = TRUE)
+#> ── Peruvian Mammal Ecoregions (Brack-Egg, 1986) ────────────────────────────────
+#> ℹ Number of ecoregions: 10
+#> ℹ Total mammal species in Peru: 573
+#> 
+#> Ecoregions by species richness:
+#> 
+#> SB - Selva Baja: 320 species (55.8%), 18 endemic (5.6%)
+#> YUN - Yungas: 256 species (44.7%), 48 endemic (18.8%)
+#> SP - Sabana de Palmera: 83 species (14.5%), 0 endemic (0%)
+#> BSE - Bosque Seco Ecuatorial: 81 species (14.1%), 4 endemic (4.9%)
+#> VOC - Vertiente Occidental: 72 species (12.6%), 15 endemic (20.8%)
+#> PUN - Puna: 71 species (12.4%), 14 endemic (19.7%)
+#> BPP - Bosque Pluvial del Pacífico: 69 species (12%), 0 endemic (0%)
+#> COS - Costa: 66 species (11.5%), 16 endemic (24.2%)
+#> OCE - Oceánica: 30 species (5.2%), 0 endemic (0%)
+#> PAR - Páramo: 26 species (4.5%), 4 endemic (15.4%)
+#> 
+#> Use pm_by_ecoregion() to filter species by ecoregion
+#> ────────────────────────────────────────────────────────────────────────────────
 
-# Gráfico
-library(ggplot2)
-ggplot(ecoregion_diversity, aes(x = ecoregion, y = species)) +
-  geom_col(aes(fill = has_endemics), width = 0.8) +
-  geom_text(aes(label = species), hjust = -0.15, size = 3.4) +
-  coord_flip(clip = "off") +
+# Preparar datos para el gráfico tipo waffle
+waffle_data <- ecoregion_diversity |> 
+  select(ecoregion_label, pct_endemic) |> 
+  mutate(
+    total_pct = paste0(round(pct_endemic, 1), "% endemic"),
+    ecoregion_full = paste0(ecoregion_label, "\n", total_pct)
+  ) |> 
+  rowwise() |> 
+  mutate(
+    grid_data = list(
+      expand.grid(x = 1:10, y = 1:10) |> 
+        mutate(
+          id = row_number(),
+          type = ifelse(id <= round(pct_endemic), "Endemic", "Common")
+        )
+    )
+  ) |> 
+  unnest(grid_data)
+
+# Crear el gráfico
+ggplot(waffle_data, aes(x = x, y = y, fill = type)) +
+  geom_tile(color = "white", linewidth = 0.4) +
+  facet_wrap(~ecoregion_full, ncol = 2) +
   scale_fill_manual(
-    values = c("FALSE" = "#5A7BAA", "TRUE" = "#E07A5F"),
-    labels = c("No endemics", "Has endemics"),
-    name = ""
+    name = NULL,
+    values = c("Common" = "#CBD5E1", "Endemic" = "#E07A5F"),
+    labels = c("Common species", "Endemic species")
   ) +
+  coord_equal() +
   labs(
-  title = "Mammal Diversity by Ecoregion of Peru",
-  subtitle = "Colors indicate the presence or absence of endemic species",
-  x = "Ecoregion",
-  y = "Number of Species"
+    title = "Mammal Endemism by Ecoregion in Peru",
+    subtitle = "Each square represents 1% of species. The percentage indicates the proportion of endemic species"
   ) +
-  theme_minimal(base_size = 12) +
+  theme_void() +
   theme(
-    plot.title = element_text(face = "bold", size = 14),
-    plot.subtitle = element_text(size = 11),
-    axis.text.y = element_text(size = 10),
-    legend.position = "top",
-    plot.margin = margin(10, 30, 10, 10)
+    plot.title = element_text(
+      face = "bold", 
+      size = 16, 
+      hjust = 0.5, 
+      margin = margin(b = 5)
+    ),
+    plot.subtitle = element_text(
+      hjust = 0.5, 
+      size = 10, 
+      color = "gray30", 
+      margin = margin(b = 20)
+    ),
+    legend.position = "bottom",
+    legend.text = element_text(size = 10),
+    legend.key.size = unit(0.7, "cm"),
+    legend.margin = margin(t = 15),
+    strip.text = element_text(
+      size = 9,
+      face = "bold", 
+      lineheight = 1.1,
+      margin = margin(t = 5, b = 5)  # Aumentar márgenes
+    ),
+    strip.clip = "off",  # Permitir que el texto se extienda fuera del panel
+    plot.background = element_rect(fill = "white", color = NA),
+    panel.spacing.x = unit(2, "lines"),  # Aumentar espacio horizontal
+    panel.spacing.y = unit(2.5, "lines"),  # Aumentar espacio vertical
+    plot.margin = margin(15, 15, 15, 15)
   )
 ```
 
-![](vignette_files/figure-html/ecoregions-1.png)
+![.](vignette_files/figure-html/ecoregions-1.png)
 
 The **Selva Baja** contains the highest species richness, while the
 **Yungas** harbor the greatest number of endemic mammals.
@@ -204,28 +232,8 @@ species_list <- c(
 
 validated <- validate_peru_mammals(
   species_list,
-  quiet = FALSE
+  quiet = TRUE
 )
-#> Loaded peru_mammals database: 573 species
-#> Classified 6 input names
-#>   Rank 1 (genus): 0
-#>   Rank 2 (binomial): 6
-#> 
-#> Starting hierarchical matching pipeline...
-#> Node 1 (Direct match): 4 matches
-#> Node 2 (Genus match): 2 matches
-#> Node 4 (Fuzzy species): 1 matches
-#> ── MATCHING SUMMARY ────────────────────────────────────────────────────────────
-#> 
-#> ── Statistics ──
-#> 
-#> • Input names: 6
-#> • Matched names: 5 (83.3%)
-#> • Direct matches: 4
-#> • Unmatched names: 1
-#> ! Fuzzy matching was used. Review results carefully.
-#> ℹ Use `get_ambiguous_matches()` to check for ambiguous cases.
-#> ────────────────────────────────────────────────────────────────────────────────
 
 validated %>%
   select(Orig.Name, Matched.Name, Match.Level, valid_rank)
@@ -306,31 +314,6 @@ cleaned_data
 #> 7             Exact rank
 #> 8             Exact rank
 #> 9             Exact rank
-```
-
-## Citation
-
-### Package Citation
-
-``` r
-citation("perumammals")
-#> To cite perumammals in publications, please use:
-#> 
-#>   Santos Andrade, P. E. (2025). perumammals: Taxonomic Backbone and
-#>   Name Validation Tools for Mammals of Peru. R package version 0.0.0.1.
-#>   Available at https://paulesantos.github.io/perumammals/.
-#> 
-#>   Pacheco, V., Cadenillas, R., Zeballos, H., Hurtado, C. M., Ruelas,
-#>   D., & Pari, A. (2021). Lista actualizada de la diversidad de los
-#>   mamíferos del Perú y una propuesta para su actualización. Revista
-#>   peruana de biología.
-#> 
-#> The taxonomic backbone included in this package is based on the
-#> following reference:
-#> 
-#> To see these entries in BibTeX format, use 'print(<citation>,
-#> bibtex=TRUE)', 'toBibtex(.)', or set
-#> 'options(citation.bibtex.max=999)'.
 ```
 
 ------------------------------------------------------------------------

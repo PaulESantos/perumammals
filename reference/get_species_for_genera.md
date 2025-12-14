@@ -24,13 +24,3 @@ get_species_for_genera(matched_genera, target_df = NULL)
 
 A data frame with genus and species columns for all species in the
 matched genera.
-
-## Examples
-
-``` r
-if (FALSE) { # \dontrun{
-# Get all species of Panthera
-data(peru_mammals)
-panthera_species <- get_species_for_genera("PANTHERA", peru_mammals)
-} # }
-```

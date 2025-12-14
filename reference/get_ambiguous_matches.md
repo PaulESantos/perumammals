@@ -52,20 +52,3 @@ During fuzzy matching, multiple candidates may have identical string
 distances. The matching algorithm automatically selects the first
 candidate, but this function allows you to review all alternatives for
 quality control.
-
-## Examples
-
-``` r
-if (FALSE) { # \dontrun{
-# After fuzzy matching
-result <- fuzzy_match_genus(processed, peru_mammals)
-
-# Check for ambiguous matches
-ambiguous <- get_ambiguous_matches(result, type = "genus")
-
-# Save to file for manual review
-get_ambiguous_matches(result, type = "all",
-                     save_to_file = TRUE,
-                     output_dir = "~/my_validation")
-} # }
-```

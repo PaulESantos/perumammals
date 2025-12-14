@@ -49,6 +49,9 @@
 - [`pm_list_ecoregions()`](https://paulesantos.github.io/perumammals/reference/pm_list_ecoregions.md)
   : Display ecoregion metadata for Peruvian mammals
 
+- [`pm_list_endemic()`](https://paulesantos.github.io/perumammals/reference/pm_list_endemic.md)
+  : List endemic mammal species by taxonomic order
+
 - [`pm_list_families()`](https://paulesantos.github.io/perumammals/reference/pm_list_families.md)
   : List taxonomic families in the Peruvian mammal backbone
 

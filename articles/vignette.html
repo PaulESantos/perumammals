@@ -13,17 +13,18 @@
 <link href="../deps/Abhaya_Libre-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Exploring Mammal Diversity in Peru with perumammals">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<meta property="og:title" content="Exploring Mammal Diversity in Peru with perumammals">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-#FEFDF9" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">perumammals</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.0.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,9 +33,9 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="active nav-item"><a class="nav-link" href="../articles/vignette.html">Get started</a></li>
+<li class="nav-item"><a class="nav-link" href="../articles/getting_started.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="nav-item dropdown">
+<li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/vignette.html">Exploring mammal diversity in Peru</a></li>
@@ -60,7 +61,7 @@
                         <h4 data-toc-skip class="author">Paul Efren
 Santos Andrade</h4>
             
-            <h4 data-toc-skip class="date">2025-12-10</h4>
+            <h4 data-toc-skip class="date">2025-12-14</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/PaulESantos/perumammals/blob/main/vignettes/vignette.Rmd" class="external-link"><code>vignettes/vignette.Rmd</code></a></small>
       <div class="d-none name"><code>vignette.Rmd</code></div>
@@ -105,7 +106,7 @@ fuzzy matching.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"peru_mammals"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">glimpse</span><span class="op">(</span><span class="va">peru_mammals</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">peru_mammals</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 573</span></span>
 <span><span class="co">#&gt; Columns: 12</span></span>
 <span><span class="co">#&gt; $ pm_id                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "M0542_EUB"<span style="color: #949494;">, </span>"M0543_BAL"<span style="color: #949494;">, </span>"M0544_BAL"<span style="color: #949494;">, </span>"M0545_BAL…</span></span>
@@ -128,31 +129,34 @@ fuzzy matching.</p>
 <h3 id="orders-and-species-richness">Orders and Species Richness<a class="anchor" aria-label="anchor" href="#orders-and-species-richness"></a>
 </h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">order_summary</span> <span class="op">&lt;-</span> <span class="va">peru_mammals</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">count</span><span class="op">(</span><span class="va">order</span>, sort <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">mutate</span><span class="op">(</span>percentage <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">n</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">order_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pm_list_orders.html">pm_list_orders</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">n_species</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>percentage <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">n_species</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">n_species</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">order_summary</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 13 × 3</span></span></span>
-<span><span class="co">#&gt;    order                n percentage</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Rodentia           194       33.9</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Chiroptera         189       33  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Didelphimorphia     47        8.2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Artiodactyla        46        8  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Primates            42        7.3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Carnivora           33        5.8</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Pilosa               7        1.2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Cingulata            5        0.9</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Eulipotyphla         3        0.5</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Lagomorpha           2        0.3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> Paucituberculata     2        0.3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> Perissodactyla       2        0.3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> Sirenia              1        0.2</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 13 × 6</span></span></span>
+<span><span class="co">#&gt;    order            n_families n_genera n_species n_endemic percentage</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Rodentia                 11       67       194        56       33.9</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Chiroptera                8       64       189         9       33  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Didelphimorphia           1       15        47        10        8.2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Artiodactyla             10       31        46         0        8  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Primates                  3       12        42         9        7.3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Carnivora                 7       20        33         0        5.8</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Pilosa                    4        5         7         0        1.2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Cingulata                 2        3         5         1        0.9</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Eulipotyphla              1        1         3         2        0.5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Lagomorpha                1        1         2         0        0.3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> Paucituberculata          1        2         2         0        0.3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> Perissodactyla            1        1         2         0        0.3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> Sirenia                   1        1         1         0        0.2</span></span>
 <span></span>
-<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">order_summary</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html" class="external-link">reorder</a></span><span class="op">(</span><span class="va">order</span>, <span class="va">n</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">order_summary</span>, </span>
+<span>       <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html" class="external-link">reorder</a></span><span class="op">(</span><span class="va">order</span>, <span class="va">n_species</span><span class="op">)</span>,</span>
+<span>           y <span class="op">=</span> <span class="va">n_species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_col</span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_text</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>label <span class="op">=</span> <span class="va">n</span><span class="op">)</span>, hjust <span class="op">=</span> <span class="op">-</span><span class="fl">0.2</span>, size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_text</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>label <span class="op">=</span> <span class="va">n_species</span><span class="op">)</span>,</span>
+<span>            hjust <span class="op">=</span> <span class="op">-</span><span class="fl">0.2</span>, size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">coord_flip</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">labs</span><span class="op">(</span></span>
 <span>    title <span class="op">=</span> <span class="st">"Mammalian Diversity in Peru by Order"</span>,</span>
@@ -161,7 +165,7 @@ fuzzy matching.</p>
 <span>    y <span class="op">=</span> <span class="st">"Number of Species"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="vignette_files/figure-html/orders-diversity-1.png" class="r-plt" width="672"></p>
+<p><img src="vignette_files/figure-html/orders-diversity-1.png" class="r-plt" alt="." width="100%" style="display: block; margin: auto;"></p>
 <p><strong>Rodentia</strong> (194 species) and
 <strong>Chiroptera</strong> (189 species) together account for nearly
 <strong>67%</strong> of Peru’s mammalian diversity.</p>
@@ -171,41 +175,24 @@ fuzzy matching.</p>
 <h2 id="endemic-species">Endemic Species<a class="anchor" aria-label="anchor" href="#endemic-species"></a>
 </h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">endemic_summary</span> <span class="op">&lt;-</span> <span class="va">peru_mammals</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">endemic</span> <span class="op">==</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">count</span><span class="op">(</span><span class="va">order</span>, sort <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">endemic_summary</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 2</span></span></span>
-<span><span class="co">#&gt;   order               n</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Rodentia           56</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Didelphimorphia    10</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> Chiroptera          9</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Primates            9</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> Eulipotyphla        2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> Cingulata           1</span></span>
-<span></span>
-<span><span class="va">endemism_rate</span> <span class="op">&lt;-</span> <span class="va">peru_mammals</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">order</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">summarise</span><span class="op">(</span></span>
-<span>    total <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>,</span>
-<span>    endemic <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">endemic</span> <span class="op">==</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span>    endemic_pct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">endemic</span> <span class="op">/</span> <span class="va">total</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">endemic</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">arrange</span><span class="op">(</span><span class="fu">desc</span><span class="op">(</span><span class="va">endemic_pct</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">endemism_rate</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 4</span></span></span>
-<span><span class="co">#&gt;   order           total endemic endemic_pct</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Eulipotyphla        3       2        66.7</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> Rodentia          194      56        28.9</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> Primates           42       9        21.4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> Didelphimorphia    47      10        21.3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> Cingulata           5       1        20  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> Chiroptera        189       9         4.8</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/pm_list_endemic.html">pm_list_endemic</a></span><span class="op">(</span>include_rate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 14 × 7</span></span></span>
+<span><span class="co">#&gt;    order        n_families n_genera n_endemic n_species endemic_rate endemic_pct</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> Rodentia             11       67        56       194       0.289         28.9</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> Chiroptera            8       64         9       189       0.047<span style="text-decoration: underline;">6</span>         4.8</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> Didelphimor…          1       15        10        47       0.213         21.3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> Artiodactyla         10       31         0        46       0              0  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Primates              3       12         9        42       0.214         21.4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Carnivora             7       20         0        33       0              0  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> Pilosa                4        5         0         7       0              0  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> Cingulata             2        3         1         5       0.2           20  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> Eulipotyphla          1        1         2         3       0.667         66.7</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Lagomorpha            1        1         0         2       0              0  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> Paucituberc…          1        2         0         2       0              0  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> Perissodact…          1        1         0         2       0              0  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> Sirenia               1        1         0         1       0              0  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> Total                16       43        87       573       0.152         15.2</span></span></code></pre></div>
 <p><strong>Rodentia</strong> contains the largest number of endemic
 species (56), representing <strong>64.4%</strong> of all mammalian
 endemics in Peru.</p>
@@ -218,50 +205,92 @@ endemics in Peru.</p>
 </h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">ecoregion_diversity</span> <span class="op">&lt;-</span> <span class="fu">tribble</span><span class="op">(</span></span>
-<span>  <span class="op">~</span><span class="va">ecoregion</span>, <span class="op">~</span><span class="va">species</span>, <span class="op">~</span><span class="va">endemics</span>,</span>
-<span>  <span class="st">"Selva Baja"</span>, <span class="fl">320</span>, <span class="fl">18</span>,</span>
-<span>  <span class="st">"Yungas"</span>, <span class="fl">256</span>, <span class="fl">48</span>,</span>
-<span>  <span class="st">"Sabana de Palmeras"</span>, <span class="fl">78</span>, <span class="fl">0</span>,</span>
-<span>  <span class="st">"Puna"</span>, <span class="fl">71</span>, <span class="fl">14</span>,</span>
-<span>  <span class="st">"Vertiente Occidental"</span>, <span class="fl">71</span>, <span class="fl">15</span>,</span>
-<span>  <span class="st">"Bosque Seco Ecuatorial"</span>, <span class="fl">81</span>, <span class="fl">4</span>,</span>
-<span>  <span class="st">"Bosque Pluvial Pacífico"</span>, <span class="fl">69</span>, <span class="fl">0</span>,</span>
-<span>  <span class="st">"Costa"</span>, <span class="fl">66</span>, <span class="fl">16</span>,</span>
-<span>  <span class="st">"Oceánica"</span>, <span class="fl">30</span>, <span class="fl">0</span>,</span>
-<span>  <span class="st">"Páramo"</span>, <span class="fl">26</span>, <span class="fl">4</span></span>
-<span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">mutate</span><span class="op">(</span></span>
-<span>    has_endemics <span class="op">=</span> <span class="va">endemics</span> <span class="op">&gt;</span> <span class="fl">0</span>,</span>
-<span>    ecoregion <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">ecoregion</span>, levels <span class="op">=</span> <span class="va">ecoregion</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">species</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
+<span><span class="co"># Obtener datos de ecoregiones</span></span>
+<span><span class="va">ecoregion_diversity</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pm_list_ecoregions.html">pm_list_ecoregions</a></span><span class="op">(</span>include_endemic <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ── Peruvian Mammal Ecoregions (Brack-Egg, 1986) ────────────────────────────────</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Number of ecoregions: 10</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Total mammal species in Peru: 573</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Ecoregions by species richness:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">SB</span> - Selva Baja: <span style="color: #00BB00;">320</span> species (55.8%), <span style="color: #BBBB00;">18</span> endemic (5.6%)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">YUN</span> - Yungas: <span style="color: #00BB00;">256</span> species (44.7%), <span style="color: #BBBB00;">48</span> endemic (18.8%)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">SP</span> - Sabana de Palmera: <span style="color: #00BB00;">83</span> species (14.5%), <span style="color: #BBBB00;">0</span> endemic (0%)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">BSE</span> - Bosque Seco Ecuatorial: <span style="color: #00BB00;">81</span> species (14.1%), <span style="color: #BBBB00;">4</span> endemic (4.9%)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">VOC</span> - Vertiente Occidental: <span style="color: #00BB00;">72</span> species (12.6%), <span style="color: #BBBB00;">15</span> endemic (20.8%)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">PUN</span> - Puna: <span style="color: #00BB00;">71</span> species (12.4%), <span style="color: #BBBB00;">14</span> endemic (19.7%)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">BPP</span> - Bosque Pluvial del Pacífico: <span style="color: #00BB00;">69</span> species (12%), <span style="color: #BBBB00;">0</span> endemic (0%)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">COS</span> - Costa: <span style="color: #00BB00;">66</span> species (11.5%), <span style="color: #BBBB00;">16</span> endemic (24.2%)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">OCE</span> - Oceánica: <span style="color: #00BB00;">30</span> species (5.2%), <span style="color: #BBBB00;">0</span> endemic (0%)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">PAR</span> - Páramo: <span style="color: #00BB00;">26</span> species (4.5%), <span style="color: #BBBB00;">4</span> endemic (15.4%)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">Use pm_by_ecoregion() to filter species by ecoregion</span></span></span>
+<span><span class="co">#&gt; ────────────────────────────────────────────────────────────────────────────────</span></span>
 <span></span>
-<span><span class="co"># Gráfico</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">ecoregion_diversity</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">ecoregion</span>, y <span class="op">=</span> <span class="va">species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">has_endemics</span><span class="op">)</span>, width <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">species</span><span class="op">)</span>, hjust <span class="op">=</span> <span class="op">-</span><span class="fl">0.15</span>, size <span class="op">=</span> <span class="fl">3.4</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span>clip <span class="op">=</span> <span class="st">"off"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span></span>
-<span>    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FALSE"</span> <span class="op">=</span> <span class="st">"#5A7BAA"</span>, <span class="st">"TRUE"</span> <span class="op">=</span> <span class="st">"#E07A5F"</span><span class="op">)</span>,</span>
-<span>    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"No endemics"</span>, <span class="st">"Has endemics"</span><span class="op">)</span>,</span>
-<span>    name <span class="op">=</span> <span class="st">""</span></span>
+<span><span class="co"># Preparar datos para el gráfico tipo waffle</span></span>
+<span><span class="va">waffle_data</span> <span class="op">&lt;-</span> <span class="va">ecoregion_diversity</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">ecoregion_label</span>, <span class="va">pct_endemic</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    total_pct <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pct_endemic</span>, <span class="fl">1</span><span class="op">)</span>, <span class="st">"% endemic"</span><span class="op">)</span>,</span>
+<span>    ecoregion_full <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">ecoregion_label</span>, <span class="st">"\n"</span>, <span class="va">total_pct</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rowwise.html" class="external-link">rowwise</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    grid_data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, y <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>        <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>          id <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html" class="external-link">row_number</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>          type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">id</span> <span class="op">&lt;=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">pct_endemic</span><span class="op">)</span>, <span class="st">"Endemic"</span>, <span class="st">"Common"</span><span class="op">)</span></span>
+<span>        <span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">unnest</span><span class="op">(</span><span class="va">grid_data</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Crear el gráfico</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">waffle_data</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>, fill <span class="op">=</span> <span class="va">type</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_tile</span><span class="op">(</span>color <span class="op">=</span> <span class="st">"white"</span>, linewidth <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">ecoregion_full</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">scale_fill_manual</span><span class="op">(</span></span>
+<span>    name <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Common"</span> <span class="op">=</span> <span class="st">"#CBD5E1"</span>, <span class="st">"Endemic"</span> <span class="op">=</span> <span class="st">"#E07A5F"</span><span class="op">)</span>,</span>
+<span>    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Common species"</span>, <span class="st">"Endemic species"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
-<span>  title <span class="op">=</span> <span class="st">"Mammal Diversity by Ecoregion of Peru"</span>,</span>
-<span>  subtitle <span class="op">=</span> <span class="st">"Colors indicate the presence or absence of endemic species"</span>,</span>
-<span>  x <span class="op">=</span> <span class="st">"Ecoregion"</span>,</span>
-<span>  y <span class="op">=</span> <span class="st">"Number of Species"</span></span>
+<span>  <span class="fu">coord_equal</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Mammal Endemism by Ecoregion in Peru"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"Each square represents 1% of species. The percentage indicates the proportion of endemic species"</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
-<span>    plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>face <span class="op">=</span> <span class="st">"bold"</span>, size <span class="op">=</span> <span class="fl">14</span><span class="op">)</span>,</span>
-<span>    plot.subtitle <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">11</span><span class="op">)</span>,</span>
-<span>    axis.text.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>,</span>
-<span>    legend.position <span class="op">=</span> <span class="st">"top"</span>,</span>
-<span>    plot.margin <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">margin</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">30</span>, <span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span>  <span class="fu">theme_void</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">theme</span><span class="op">(</span></span>
+<span>    plot.title <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span></span>
+<span>      face <span class="op">=</span> <span class="st">"bold"</span>, </span>
+<span>      size <span class="op">=</span> <span class="fl">16</span>, </span>
+<span>      hjust <span class="op">=</span> <span class="fl">0.5</span>, </span>
+<span>      margin <span class="op">=</span> <span class="fu">margin</span><span class="op">(</span>b <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    plot.subtitle <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span></span>
+<span>      hjust <span class="op">=</span> <span class="fl">0.5</span>, </span>
+<span>      size <span class="op">=</span> <span class="fl">10</span>, </span>
+<span>      color <span class="op">=</span> <span class="st">"gray30"</span>, </span>
+<span>      margin <span class="op">=</span> <span class="fu">margin</span><span class="op">(</span>b <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    legend.position <span class="op">=</span> <span class="st">"bottom"</span>,</span>
+<span>    legend.text <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>,</span>
+<span>    legend.key.size <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">0.7</span>, <span class="st">"cm"</span><span class="op">)</span>,</span>
+<span>    legend.margin <span class="op">=</span> <span class="fu">margin</span><span class="op">(</span>t <span class="op">=</span> <span class="fl">15</span><span class="op">)</span>,</span>
+<span>    strip.text <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span></span>
+<span>      size <span class="op">=</span> <span class="fl">9</span>,</span>
+<span>      face <span class="op">=</span> <span class="st">"bold"</span>, </span>
+<span>      lineheight <span class="op">=</span> <span class="fl">1.1</span>,</span>
+<span>      margin <span class="op">=</span> <span class="fu">margin</span><span class="op">(</span>t <span class="op">=</span> <span class="fl">5</span>, b <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>  <span class="co"># Aumentar márgenes</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    strip.clip <span class="op">=</span> <span class="st">"off"</span>,  <span class="co"># Permitir que el texto se extienda fuera del panel</span></span>
+<span>    plot.background <span class="op">=</span> <span class="fu">element_rect</span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"white"</span>, color <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>,</span>
+<span>    panel.spacing.x <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">2</span>, <span class="st">"lines"</span><span class="op">)</span>,  <span class="co"># Aumentar espacio horizontal</span></span>
+<span>    panel.spacing.y <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">2.5</span>, <span class="st">"lines"</span><span class="op">)</span>,  <span class="co"># Aumentar espacio vertical</span></span>
+<span>    plot.margin <span class="op">=</span> <span class="fu">margin</span><span class="op">(</span><span class="fl">15</span>, <span class="fl">15</span>, <span class="fl">15</span>, <span class="fl">15</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="vignette_files/figure-html/ecoregions-1.png" class="r-plt" width="672"></p>
+<p><img src="vignette_files/figure-html/ecoregions-1.png" class="r-plt" alt="." width="100%" style="display: block; margin: auto;"></p>
 <p>The <strong>Selva Baja</strong> contains the highest species
 richness, while the <strong>Yungas</strong> harbor the greatest number
 of endemic mammals.</p>
@@ -282,31 +311,11 @@ of endemic mammals.</p>
 <span></span>
 <span><span class="va">validated</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/validate_peru_mammals.html">validate_peru_mammals</a></span><span class="op">(</span></span>
 <span>  <span class="va">species_list</span>,</span>
-<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Loaded peru_mammals database: 573 species</span></span>
-<span><span class="co">#&gt; Classified 6 input names</span></span>
-<span><span class="co">#&gt;   Rank 1 (genus): 0</span></span>
-<span><span class="co">#&gt;   Rank 2 (binomial): 6</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Starting hierarchical matching pipeline...</span></span>
-<span><span class="co">#&gt; Node 1 (Direct match): 4 matches</span></span>
-<span><span class="co">#&gt; Node 2 (Genus match): 2 matches</span></span>
-<span><span class="co">#&gt; Node 4 (Fuzzy species): 1 matches</span></span>
-<span><span class="co">#&gt; ── MATCHING SUMMARY ────────────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── <span style="font-weight: bold;">Statistics</span> ──</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; • Input names: <span style="color: #0000BB;">6</span></span></span>
-<span><span class="co">#&gt; • Matched names: <span style="color: #0000BB;">5</span> (<span style="font-style: italic;">83.3%</span>)</span></span>
-<span><span class="co">#&gt; • Direct matches: <span style="color: #0000BB;">4</span></span></span>
-<span><span class="co">#&gt; • Unmatched names: <span style="color: #0000BB;">1</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Fuzzy matching was used. Review results carefully.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Use `get_ambiguous_matches()` to check for ambiguous cases.</span></span>
-<span><span class="co">#&gt; ────────────────────────────────────────────────────────────────────────────────</span></span>
 <span></span>
-<span><span class="va">validated</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">select</span><span class="op">(</span><span class="va">Orig.Name</span>, <span class="va">Matched.Name</span>, <span class="va">Match.Level</span>, <span class="va">valid_rank</span><span class="op">)</span></span>
+<span><span class="va">validated</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Orig.Name</span>, <span class="va">Matched.Name</span>, <span class="va">Match.Level</span>, <span class="va">valid_rank</span><span class="op">)</span></span>
 <span><span class="co">#&gt;               Orig.Name         Matched.Name            Match.Level valid_rank</span></span>
 <span><span class="co">#&gt; 1    Tremarctos ornatos   Tremarctos ornatus             Exact rank       TRUE</span></span>
 <span><span class="co">#&gt; 2    Leopardus pardalis   Leopardus pardalis             Exact rank       TRUE</span></span>
@@ -324,9 +333,9 @@ standardized scientific names while preserving the original input.</p>
 <h3 id="conservation-assessment">Conservation Assessment<a class="anchor" aria-label="anchor" href="#conservation-assessment"></a>
 </h3>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">endemic_primates</span> <span class="op">&lt;-</span> <span class="va">peru_mammals</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">order</span> <span class="op">==</span> <span class="st">"Primates"</span>, <span class="va">endemic</span> <span class="op">==</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">select</span><span class="op">(</span><span class="va">genus</span>, <span class="va">species</span>, <span class="va">common_name</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">endemic_primates</span> <span class="op">&lt;-</span> <span class="va">peru_mammals</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">order</span> <span class="op">==</span> <span class="st">"Primates"</span>, <span class="va">endemic</span> <span class="op">==</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">genus</span>, <span class="va">species</span>, <span class="va">common_name</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">endemic_primates</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 9 × 3</span></span></span>
@@ -356,12 +365,12 @@ standardized scientific names while preserving the original input.</p>
 <span>  count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">cleaned_data</span> <span class="op">&lt;-</span> <span class="va">field_data</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">left_join</span><span class="op">(</span></span>
+<span><span class="va">cleaned_data</span> <span class="op">&lt;-</span> <span class="va">field_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/validate_peru_mammals.html">validate_peru_mammals</a></span><span class="op">(</span><span class="va">field_data</span><span class="op">$</span><span class="va">species</span><span class="op">)</span>,</span>
 <span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"species"</span> <span class="op">=</span> <span class="st">"Orig.Name"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">select</span><span class="op">(</span><span class="va">site</span>, original <span class="op">=</span> <span class="va">species</span>, validated <span class="op">=</span> <span class="va">Matched.Name</span>, <span class="va">count</span>, <span class="va">Match.Level</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">site</span>, original <span class="op">=</span> <span class="va">species</span>, validated <span class="op">=</span> <span class="va">Matched.Name</span>, <span class="va">count</span>, <span class="va">Match.Level</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">cleaned_data</span></span>
 <span><span class="co">#&gt;     site               original            validated count</span></span>
@@ -384,33 +393,6 @@ standardized scientific names while preserving the original input.</p>
 <span><span class="co">#&gt; 7             Exact rank</span></span>
 <span><span class="co">#&gt; 8             Exact rank</span></span>
 <span><span class="co">#&gt; 9             Exact rank</span></span></code></pre></div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
-</h2>
-<div class="section level3">
-<h3 id="package-citation">Package Citation<a class="anchor" aria-label="anchor" href="#package-citation"></a>
-</h3>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"perumammals"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; To cite perumammals in publications, please use:</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;   Santos Andrade, P. E. (2025). perumammals: Taxonomic Backbone and</span></span>
-<span><span class="co">#&gt;   Name Validation Tools for Mammals of Peru. R package version 0.0.0.1.</span></span>
-<span><span class="co">#&gt;   Available at https://paulesantos.github.io/perumammals/.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;   Pacheco, V., Cadenillas, R., Zeballos, H., Hurtado, C. M., Ruelas,</span></span>
-<span><span class="co">#&gt;   D., &amp; Pari, A. (2021). Lista actualizada de la diversidad de los</span></span>
-<span><span class="co">#&gt;   mamíferos del Perú y una propuesta para su actualización. Revista</span></span>
-<span><span class="co">#&gt;   peruana de biología.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; The taxonomic backbone included in this package is based on the</span></span>
-<span><span class="co">#&gt; following reference:</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; To see these entries in BibTeX format, use 'print(&lt;citation&gt;,</span></span>
-<span><span class="co">#&gt; bibtex=TRUE)', 'toBibtex(.)', or set</span></span>
-<span><span class="co">#&gt; 'options(citation.bibtex.max=999)'.</span></span></code></pre></div>
 <hr>
 </div>
 </div>

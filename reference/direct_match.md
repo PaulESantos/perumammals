@@ -41,20 +41,3 @@ does not include infraspecific taxa. It handles:
 Names at Rank 1 (genus only) are not matched by this function; use
 [`genus_match()`](https://paulesantos.github.io/perumammals/reference/genus_match.md)
 instead.
-
-## Examples
-
-``` r
-if (FALSE) { # \dontrun{
-# Prepare data
-classified <- .splist_classify(c("Panthera onca", "Tremarctos ornatus"))
-transformed <- .transform_split_classify(classified)
-
-# Match against peru_mammals
-data(peru_mammals)
-result <- direct_match(transformed, peru_mammals)
-
-# Check results
-table(result$direct_match)
-} # }
-```

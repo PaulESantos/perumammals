@@ -108,7 +108,7 @@ match_quality_peru(species_list)
 ## Working with data frames
 
 The validation functions integrate smoothly with data frames and the tidyverse:
-```{r dataframe}
+```{r dataframe, warning=FALSE, message=FALSE}
 library(dplyr)
 
 # Create a sample dataset
@@ -293,8 +293,3 @@ Santos Andrade, P. E., & Gonzales Guillen, F. N. (2025). perumammals: Taxonomic 
 
 **Data source:**
 Pacheco, V., Cadenillas, R., Zeballos, H., Hurtado, C. M., Ruelas, D., & Pari, A. (2021). Lista actualizada de la diversidad de los mamíferos del Perú y una propuesta para su actualización. *Revista Peruana de Biología*, 28(special issue), e21019. https://doi.org/10.15381/rpb.v28i4.21019
-
-## Session info
-```{r sessioninfo}
-sessionInfo()
-```

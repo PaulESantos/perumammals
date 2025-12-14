@@ -150,22 +150,6 @@ test_that("Dataset peru_mammals_backbone tiene estructura correcta", {
 })
 
 
-# =============================================================================
-# TEST SUITE 5: Funciones de Clasificación Interna
-# =============================================================================
-
-test_that("Funciones de clasificación procesan nombres correctamente", {
-  # Test 5.1: Nombres binomiales se clasifican como Rank 2
-  binomial <- "Akodon torques"
-  # Nota: Si .splist_classify no está exportada, este test se omite
-
-  # Test 5.2: Nombres solo con género se clasifican como Rank 1
-  genus_only <- "Akodon"
-
-  # Test 5.3: Nombres con más de dos palabras se clasifican como inválidos
-  trinomial <- "Genus species subspecies"
-})
-
 
 # =============================================================================
 # TEST SUITE 6: Consistencia entre Datasets

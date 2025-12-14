@@ -77,6 +77,10 @@
 #' not include infraspecific taxa, but this function handles "sp." notations
 #' for undescribed species (e.g., "Akodon sp. Ancash").
 #'
+#' **Automatic normalization**: Empty strings ("", "  ", etc.) are automatically
+#' converted to NA before processing, as they represent missing values and
+#' cannot match any names in the database.
+#'
 #' @param x Character vector of species names
 #'
 #' @return Matrix with classified name components
@@ -84,7 +88,28 @@
 #' @keywords internal
 .splist_classify <- function(x) {
 
+  # ========================================================================
+  # SECTION 1: Normalize Empty Strings to NA
+  # ========================================================================
+  # Empty strings and whitespace-only strings cannot match database entries
+  # and represent missing values - convert them to NA for consistent handling
+
+  is_empty <- !is.na(x) & trimws(x) == ""
+
+  if (any(is_empty)) {
+    x[is_empty] <- NA_character_
+    # No need to notify user - this is a silent normalization of data quality
+  }
+
+  # ========================================================================
+  # SECTION 2: Standardize Names
+  # ========================================================================
+
   x <- .names_standardize(x)
+
+  # ========================================================================
+  # SECTION 3: Split and Classify Names
+  # ========================================================================
 
   # Dividir nombres
   x_split <- strsplit(x, " ")
@@ -170,6 +195,12 @@
 #' data frame. Simplified for peru_mammals which only has binomial names
 #' (and some "sp." cases) without infraspecific categories.
 #'
+#' **Important**: This function distinguishes between:
+#' - Original NAs from the input (expected missing values)
+#' - Malformed names that failed rank assignment (problematic inputs)
+#'
+#' Only the latter trigger warnings to avoid false positives.
+#'
 #' @param df Data frame or matrix from .splist_classify
 #'
 #' @return Data frame with transformed names and rank
@@ -179,7 +210,16 @@
   df <- as.data.frame(df)
   df$sorter <- 1:nrow(df)
 
-  # Calcular Rank taxonómico
+  # ========================================================================
+  # SECTION 1: Identify Original NAs
+  # ========================================================================
+  # Track which rows had NA from the start (not malformed, just missing)
+
+  original_nas <- is.na(df$Orig.Name)
+
+  # ========================================================================
+  # SECTION 2: Calculate Taxonomic Rank
+  # ========================================================================
   # Rank 1: Solo género (e.g., "Panthera")
   # Rank 2: Binomial completo (e.g., "Panthera onca" o "Akodon sp. Ancash")
 
@@ -194,18 +234,30 @@
     TRUE ~ NA_integer_
   )
 
-  # Validar que no haya NAs inesperados en Rank
-  if (any(is.na(df$Rank))) {
-    na_ranks <- sum(is.na(df$Rank))
+  # ========================================================================
+  # SECTION 3: Validate Ranks (Only for Non-NA Inputs)
+  # ========================================================================
+  # Only warn about truly malformed names, not original NAs
+
+  rank_nas <- is.na(df$Rank)
+
+  # Identify malformed names: those that have NA rank but weren't NA originally
+  malformed <- rank_nas & !original_nas
+
+  if (any(malformed)) {
+    n_malformed <- sum(malformed)
     warning(
-      na_ranks, " names could not be assigned a taxonomic rank.\n",
+      n_malformed, " names could not be assigned a taxonomic rank.\n",
       "This may indicate malformed names in the input.",
       call. = FALSE,
       immediate. = TRUE
     )
   }
 
-  # Reordenar columnas
+  # ========================================================================
+  # SECTION 4: Reorder Columns
+  # ========================================================================
+
   column_order <- c(
     "sorter",
     "Orig.Name",

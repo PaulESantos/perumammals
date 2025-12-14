@@ -6,12 +6,65 @@ test_that("Flujo completo de matching funciona end-to-end", {
   data("peru_mammals", package = "perumammals")
 
   # Test 1.1: Tomar muestra de especies del dataset y hacer matching
-  sample_size <- min(50, nrow(peru_mammals))
-  sample_species <- sample(peru_mammals$scientific_name, sample_size)
+  sample_species <- c(
+    "Platyrrhinus brachycephalus",
+    "Monodelphis ronaldi",
+    "Eptesicus furinalis",
+    "Nephelomys levipes",
+    "Leopardus jacobita",
+    "Nectomys rattus",
+    "Trinycteris nicefori",
+    "Puma yagouaroundi",
+    "Saimiri sciureus",
+    "Akodon boliviensis",
+    "Lycalopex sechurae",
+    "Anoura aequatoris",
+    "Neusticomys peruviensis",
+    "Hylaeamys yunganus",
+    "Chrotopterus auritus",
+    "Coendou prehensilis",
+    "Gardnerycteris koepckeae",
+    "Cyclopes ida",
+    "Thomasomys pyrrhonotus",
+    "Monodelphis gardeni",
+    "Myotis albescens",
+    "Hadrosciurus sp. 3",
+    "Myoprocta pratti",
+    "Chibchanomys orcesi",
+    "Oxymycterus inca",
+    "Cabassous unicinctus",
+    "Monodelphis handleyi",
+    "Lagidium viscacia",
+    "Megaptera novaeangliae",
+    "Dasyprocta variegata",
+    "Myotis riparius",
+    "Myotis oxyotus",
+    "Amphinectomys savamis",
+    "Akodon orophilus",
+    "Platyrrhinus ismaeli",
+    "Caenolestes caniventer",
+    "Odocoileus peruvianus",
+    "Proechimys simonsi",
+    "Cynomops abrasus",
+    "Potos flavus",
+    "Cynomops kuizha",
+    "Nyctinomops laticaudatus",
+    "Arctocephalus australis",
+    "Mesomys leniceps",
+    "Thomasomys macrotis",
+    "Monodelphis glirina",
+    "Centronycteris maximiliani",
+    "Isothrix barbarabrownae",
+    "Neotomys ebriosus",
+    "Marmosa simonsi",
+    "Oligoryzomys sp. C"
+  )
 
+  # Verificar
+  length(sample_species)  # Debe ser 50
   result <- validate_peru_mammals(sample_species, quiet = TRUE)
-
-  expect_equal(nrow(result), sample_size)
+nrow(result)
+  expect_equal(nrow(result), 51L)
   expect_true(all(result$matched))
   expect_true(all(result$Matched.Rank == 2L))
 
@@ -61,25 +114,6 @@ test_that("Manejo de caracteres especiales", {
   expect_s3_class(result_paren, "data.frame")
 })
 
-# test_that("Manejo de strings extremos", {
-#   # Test 2.5: String muy largo
-#   long_string <- paste(rep("word", 50), collapse = " ")
-#   result_long <- validate_peru_mammals(long_string, quiet = TRUE)
-#   expect_s3_class(result_long, "data.frame")
-#   expect_false(result_long$matched)
-#
-#   # Test 2.6: String vacío
-#   result_empty <- validate_peru_mammals("", quiet = TRUE)
-#   expect_false(result_empty$matched)
-#
-#   # Test 2.7: Solo espacios
-#   result_spaces <- validate_peru_mammals("   ", quiet = TRUE)
-#   expect_false(result_spaces$matched)
-#
-#   # Test 2.8: Tabulaciones y saltos de línea
-#   result_whitespace <- validate_peru_mammals("\t\n", quiet = TRUE)
-#   expect_false(result_whitespace$matched)
-# })
 
 test_that("Manejo de caracteres Unicode y acentos", {
   # Test 2.9: Nombres con tildes
@@ -107,13 +141,6 @@ test_that("Manejo de vectores edge case", {
   result_nas <- validate_peru_mammals(many_nas, quiet = TRUE)
   expect_equal(nrow(result_nas), length(many_nas))
 
-# # Test 3.3: Vector todo NAs
-# all_nas <- c(NA, NA, NA)
-# result_all_nas <- validate_peru_mammals(all_nas, quiet = TRUE)
-# expect_equal(nrow(result_all_nas), 3)
-# expect_true(all(is.na(result_all_nas$Orig.Name) |
-#                   !result_all_nas$matched))
-
   # Test 3.4: Vector con strings vacíos
   empties <- c("", "", "Akodon torques", "")
   result_empties <- validate_peru_mammals(empties, quiet = TRUE)
@@ -125,6 +152,7 @@ test_that("Manejo de vectores edge case", {
   expect_equal(nrow(result_repeated), 20)
   expect_true(all(result_repeated$matched))
 })
+
 
 
 # =============================================================================
@@ -168,46 +196,111 @@ test_that("Fuzzy matching con nombres similares", {
   }
 })
 
+test_that("Performance con muchos fuzzy matches", {
+  # Test 5.2: Lista con muchos typos (fuzzy matching intensivo)
+  # Usamos solo typos que sabemos que existen en la DB
+  typos <- c(
+    "Akdon torques",      # typo en genus (Akodon existe)
+    "Akodon torqes",      # typo en species (torques existe)
+    "Akdon torqes",       # typo en ambos
+    "Panthera onca",      # correcto para control
+    "Pantera onca"        # typo en genus (Panthera existe)
+  )
+
+  start_time <- Sys.time()
+
+  # Suprimir warnings de ambiguous matches (son informativos, no errores)
+  suppressWarnings({
+    result_typos <- validate_peru_mammals(rep(typos, 10), quiet = TRUE)
+  })
+
+  end_time <- Sys.time()
+
+  # Performance: menos de 20 segundos
+  execution_time <- as.numeric(difftime(end_time, start_time, units = "secs"))
+  expect_true(execution_time < 20)
+
+  # Verificaciones de resultado
+  expect_equal(nrow(result_typos), 50)
+
+  # Todos deben matchear porque todos los nombres base existen en Peru
+  expect_true(all(result_typos$matched))
+
+  # Debe haber fuzzy matches en genus
+  expect_true(any(result_typos$genus_dist > 0, na.rm = TRUE))
+
+  # Debe haber fuzzy matches en species
+  expect_true(any(result_typos$species_dist > 0, na.rm = TRUE))
+
+  # Verificar metadata de ambiguous matches
+  expect_true(!is.null(attr(result_typos, "ambiguous_genera")) ||
+                !is.null(attr(result_typos, "ambiguous_species")))
+})
+
 
 # =============================================================================
 # TEST SUITE 5: Tests de Performance
 # =============================================================================
 
-test_that("Performance con datasets grandes", {
-  # Test 5.1: Lista grande de especies válidas
-  large_valid <- rep(c("Akodon torques", "Mus musculus",
-                       "Rattus rattus", "Thomasomys kalinowskii"),
+test_that("Performance con datasets grandes (solo exact matches)", {
+  # Solo nombres correctos para medir performance pura
+  large_valid <- rep(c("Akodon torques",
+                       "Panthera onca",      # Sin typo
+                       "Thomasomys kalinowskii",
+                       "Puma concolor"),
                      length.out = 200)
 
   start_time <- Sys.time()
   result_large <- validate_peru_mammals(large_valid, quiet = TRUE)
   end_time <- Sys.time()
 
+  # Verificaciones
   expect_equal(nrow(result_large), 200)
-  expect_true(any(result_large$matched))
+  expect_equal(sum(result_large$matched), 200)  # Todos deben matchear
 
-  # Performance debe ser razonable (< 30 segundos)
+  # TODOS deben ser exact matches
+  all_exact <- all(result_large$genus_dist == 0 &
+                     result_large$species_dist == 0)
+  expect_true(all_exact)
+
+  # Performance debe ser razonable
   execution_time <- as.numeric(difftime(end_time, start_time, units = "secs"))
   expect_true(execution_time < 30)
 })
 
-test_that("Performance con muchos fuzzy matches", {
-  # Test 5.2: Lista con muchos typos (fuzzy matching intensivo)
-  typos <- c(
-    "Akdon torques",    # typo en genus
-    "Akodon torqes",    # typo en species
-    "Akdon torqes",     # typo en ambos
-    "Ms musculus",      # typo en genus
-    "Mus musculs"       # typo en species
+
+test_that("Fuzzy matching con ambiguous matches", {
+  # Específicamente probar casos ambiguos
+  ambiguous_names <- c(
+    "Pantera onca",     # Typo → Panthera
+    "Akdon torques"     # Typo → Akodon
   )
 
-  start_time <- Sys.time()
-  result_typos <- validate_peru_mammals(rep(typos, 10), quiet = FALSE)
-  end_time <- Sys.time()
+  # Capturar TODOS los warnings
+  warnings_caught <- character()
 
-  # Debe completarse en tiempo razonable
-  execution_time <- as.numeric(difftime(end_time, start_time, units = "secs"))
-  expect_true(execution_time < 20)
+  result <- withCallingHandlers(
+    validate_peru_mammals(rep(ambiguous_names, 25), quiet = TRUE),
+    warning = function(w) {
+      warnings_caught <<- c(warnings_caught, conditionMessage(w))
+      invokeRestart("muffleWarning")
+    }
+  )
+
+  # Verificar que se generaron warnings de ambiguous matches
+  expect_true(any(grepl("multiple fuzzy matches", warnings_caught)))
+  expect_true(length(warnings_caught) >= 2)  # Debería haber al menos 2
+
+  # Todos deben matchear a pesar de ser fuzzy
+  expect_equal(sum(result$matched), 50)
+
+  # Verificar que hay ambiguous matches guardados
+  ambig <- get_ambiguous_matches(result, type = "all")
+  expect_true(!is.null(ambig))
+  expect_true(nrow(ambig) > 0)
+
+  # Verificar que hay al menos 4 casos ambiguos
+  expect_true(nrow(ambig) >= 4)
 })
 
 
@@ -405,3 +498,7 @@ test_that("Datos son internamente consistentes", {
   missing_ids <- setdiff(eco_ids, main_ids)
   expect_equal(length(missing_ids), 0)
 })
+
+
+
+

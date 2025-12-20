@@ -61,5 +61,5 @@ navbar:
       - text: Art perumammalas
         href: articles/art-logo.html
 development:
-  mode: release
+  mode: auto
 

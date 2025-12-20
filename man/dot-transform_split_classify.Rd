@@ -16,5 +16,13 @@ Data frame with transformed names and rank
 Internal function to transform the classification matrix into a structured
 data frame. Simplified for peru_mammals which only has binomial names
 (and some "sp." cases) without infraspecific categories.
+
+\strong{Important}: This function distinguishes between:
+\itemize{
+\item Original NAs from the input (expected missing values)
+\item Malformed names that failed rank assignment (problematic inputs)
+}
+
+Only the latter trigger warnings to avoid false positives.
 }
 \keyword{internal}

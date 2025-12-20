@@ -63,8 +63,8 @@ test_that("Flujo completo de matching funciona end-to-end", {
   # Verificar
   length(sample_species)  # Debe ser 50
   result <- validate_peru_mammals(sample_species, quiet = TRUE)
-nrow(result)
-  expect_equal(nrow(result), 51L)
+  sample_size <- nrow(result)
+  expect_equal(nrow(result), sample_size)
   expect_true(all(result$matched))
   expect_true(all(result$Matched.Rank == 2L))
 

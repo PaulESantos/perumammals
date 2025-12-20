@@ -5,6 +5,10 @@ taxonomic components (genus, species, author). Peru mammals database
 does not include infraspecific taxa, but this function handles "sp."
 notations for undescribed species (e.g., "Akodon sp. Ancash").
 
+**Automatic normalization**: Empty strings ("", " ", etc.) are
+automatically converted to NA before processing, as they represent
+missing values and cannot match any names in the database.
+
 ## Usage
 
 ``` r

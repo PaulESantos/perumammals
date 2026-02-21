@@ -1,99 +1,100 @@
-#' .onAttach hook
-#'
-#' Hook function that runs when the package is attached via \code{library()}.
-#' It displays the package version and information about the taxonomic backbone.
-#'
-#' @param libname A character string indicating the path to the library.
-#' @param pkgname A character string with the name of the package.
-#' @keywords internal
-.onAttach <- function(libname, pkgname) {
-  # Get package version
-  pkg_version <- utils::packageDescription("perumammals", fields = "Version")
+# -------------------------------------------------------------------------
+# Helpers for attach message (perumammals-style, tidyverse-inspired)
+# -------------------------------------------------------------------------
 
-  # Get backbone info
+perumammals_pkg_version <- function() {
+  # Prefer packageVersion(): robust and does not depend on DESCRIPTION parsing
+  as.character(utils::packageVersion("perumammals"))
+}
+
+perumammals_backbone_summary <- function(backbone) {
+  # backbone expected to have: source_year, n_species
+  year <- backbone$source_year %||% NA
+  nsp  <- backbone$n_species %||% NA
+
+  paste0(
+    "Taxonomic backbone: Pacheco et al. (", year, ") | ",
+    "Species: ", nsp
+  )
+}
+
+perumammals_attach_message <- function(backbone) {
+  # Build a single message (like tidyverse) to print once
+  header <- cli::rule(
+    left  = cli::style_bold("Attaching perumammals"),
+    right = paste0("perumammals ", perumammals_pkg_version())
+  )
+
+  lines <- c(
+    paste0(cli::col_green(cli::symbol$tick), " ", cli::col_grey(perumammals_backbone_summary(backbone))),
+    paste0(cli::col_blue(cli::symbol$info), " ", cli::col_grey("Use pm_backbone_info() for full citation and details"))
+  )
+
+  paste0(header, "\n", paste(lines, collapse = "\n"))
+}
+
+# A tiny %||% helper (avoid importing rlang just for this)
+`%||%` <- function(x, y) if (is.null(x)) y else x
+
+# -------------------------------------------------------------------------
+# .onAttach hook
+# -------------------------------------------------------------------------
+
+.onAttach <- function(libname, pkgname) {
   backbone <- peru_mammals_backbone
 
-  # Display welcome message
-  packageStartupMessage(
-    cli::col_cyan(cli::style_bold("perumammals")), " ", pkg_version
-  )
+  # Print one cohesive startup message
+  packageStartupMessage(perumammals_attach_message(backbone))
 
-  packageStartupMessage(
-    cli::col_grey(
-      paste0(
-        "Taxonomic backbone: Pacheco et al. (", backbone$source_year, ") | ",
-        "Species: ", backbone$n_species
-      )
+  # Optional: check for backbone update (quiet and only when it makes sense)
+  verbose <- isTRUE(getOption("perumammals.verbose"))
+  if (interactive() && verbose) {
+    check_result <- tryCatch(
+      check_backbone_update(backbone$source_year),
+      error = function(e) NULL
     )
-  )
 
-  packageStartupMessage(
-    cli::col_grey("Use pm_backbone_info() for full citation and details")
-  )
-
-  # Check for potential updates (optional)
-  check_result <- tryCatch({
-    check_backbone_update(backbone$source_year)
-  }, error = function(e) {
-    NULL
-  })
-
-  if (!is.null(check_result) && check_result$update_available) {
-    packageStartupMessage(
-      cli::col_yellow(
-        paste0(
-          "\u2139 A orginal version of the mammal checklist may be available. ",
-          "Check https://doi.org/10.15381/rpb.v28i4.21019"
+    if (!is.null(check_result) && isTRUE(check_result$update_available)) {
+      packageStartupMessage(
+        cli::col_yellow(
+          paste0(
+            cli::symbol$warning, " ",
+            "A newer version of the mammal checklist may be available. ",
+            "See doi:10.15381/rpb.v28i4.21019"
+          )
         )
       )
-    )
-  }
-}
-
-
-# -------------------------------------------------------------------------
-
-#' Determine whether to show progress bar
-#'
-#' Returns logical TRUE/FALSE depending on package options and whether
-#' the session is interactive.
-#'
-#' @return Logical indicating whether progress bars should be shown.
-#' @keywords internal
-show_progress <- function() {
-  isTRUE(getOption("perumammals.show_progress")) && interactive()
-}
-
-
-# -------------------------------------------------------------------------
-
-#' .onLoad hook
-#'
-#' Hook function that runs when the package is loaded.
-#' It sets default options for the package.
-#'
-#' @param libname A character string with the name of the library directory.
-#' @param pkgname A character string with the name of the package.
-#' @keywords internal
-.onLoad <- function(libname, pkgname) {
-  # Get current options
-  opt <- options()
-
-  # Set default package options
-  opt_perumammals <- list(
-    perumammals.show_progress = TRUE,
-    perumammals.verbose = FALSE
-  )
-
-  # Only set options that are not already defined
-  to_set <- !(names(opt_perumammals) %in% names(opt))
-  if (any(to_set)) {
-    options(opt_perumammals[to_set])
+    }
   }
 
   invisible()
 }
 
+# -------------------------------------------------------------------------
+# .onLoad hook (tu versión está bien; solo lo dejo casi igual)
+# -------------------------------------------------------------------------
+
+.onLoad <- function(libname, pkgname) {
+  opt <- options()
+
+  opt_perumammals <- list(
+    perumammals.show_progress = TRUE,
+    perumammals.verbose = FALSE
+  )
+
+  to_set <- !(names(opt_perumammals) %in% names(opt))
+  if (any(to_set)) options(opt_perumammals[to_set])
+
+  invisible()
+}
+
+# -------------------------------------------------------------------------
+# Progress bar helper (igual que el tuyo)
+# -------------------------------------------------------------------------
+
+show_progress <- function() {
+  isTRUE(getOption("perumammals.show_progress")) && interactive()
+}
 
 # -------------------------------------------------------------------------
 

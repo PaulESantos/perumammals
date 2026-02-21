@@ -70,7 +70,7 @@ using the classification widely used in biogeography and conservation
 planning:
 
 ``` R
-#> ── Peruvian Mammal Ecoregions (Brack-Egg, 1986) ─────────────────────────────────────────────────────────────────────
+#> ── Peruvian Mammal Ecoregions (Brack-Egg, 1986) ────────────────────────────────
 #> ℹ Number of ecoregions: 10
 #> ℹ Total mammal species in Peru: 573
 #> 
@@ -89,7 +89,7 @@ planning:
 #> 
 #> Use pm_by_ecoregion() to filter species by ecoregion
 #> Use include_endemic = TRUE to see endemic species counts
-#> ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+#> ────────────────────────────────────────────────────────────────────────────────
 ```
 
 These codes are incorporated into the package as both:
@@ -191,16 +191,19 @@ The package:
 citation("perumammals")
 #> To cite perumammals in publications, please use:
 #> 
-#>   Santos Andrade, P. E., & Gonzales Guillen, F. N. (2025). perumammals: Taxonomic Backbone and Name
-#>   Validation Tools for Mammals of Peru. R package version 0.0.0.1.
-#>   https://paulesantos.github.io/perumammals/
+#>   Santos Andrade, P. E., & Gonzales Guillen, F. N. (2025). perumammals:
+#>   Taxonomic Backbone and Name Validation Tools for Mammals of Peru. R
+#>   package version 0.0.0.1. https://paulesantos.github.io/perumammals/
 #> 
 #> The taxonomic backbone included in this package is based on:
 #> 
-#> Pacheco, V., Cadenillas, R., Zeballos, H., Hurtado, C. M., Ruelas, D., & Pari, A. (2021). Lista
-#> actualizada de la diversidad de los mamíferos del Perú y una propuesta para su actualización. Revista
-#> Peruana de Biología, 28(special issue), e21019. https://doi.org/10.15381/rpb.v28i4.21019
+#> Pacheco, V., Cadenillas, R., Zeballos, H., Hurtado, C. M., Ruelas, D.,
+#> & Pari, A. (2021). Lista actualizada de la diversidad de los mamíferos
+#> del Perú y una propuesta para su actualización. Revista Peruana de
+#> Biología, 28(special issue), e21019.
+#> https://doi.org/10.15381/rpb.v28i4.21019
 #> 
-#> To see these entries in BibTeX format, use 'print(<citation>, bibtex=TRUE)', 'toBibtex(.)', or set
+#> To see these entries in BibTeX format, use 'print(<citation>,
+#> bibtex=TRUE)', 'toBibtex(.)', or set
 #> 'options(citation.bibtex.max=999)'.
 ```

@@ -172,12 +172,22 @@ information.
 ## Installation
 
 ``` r
+## Install from CRAN (recommended)
+pak::pak("perumammals")
+
 # Development version from GitHub
 # Using pak (recommended)
 pak::pak("PaulESantos/perumammals")
 
 # Or using remotes
 remotes::install_github("PaulESantos/perumammals")
+```
+
+``` r
+library(perumammals)
+── Attaching perumammals ───────────────────────────────────────────────────────────────── perumammals 0.0.0.1 ──
+✔ Taxonomic backbone: Pacheco et al. (2021) | Species: 573
+ℹ Use pm_backbone_info() for full citation and details
 ```
 
 ## Citation

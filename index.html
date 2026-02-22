@@ -279,19 +279,26 @@ names in biodiversity datasets.
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Development version from GitHub</span></span>
+<code class="sourceCode R"><span><span class="co">## Install from CRAN (recommended)</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"perumammals"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Development version from GitHub</span></span>
 <span><span class="co"># Using pak (recommended)</span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"PaulESantos/perumammals"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Or using remotes</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"PaulESantos/perumammals"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(perumammals)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>── Attaching perumammals ───────────────────────────────────────────────────────────────── perumammals <span class="dv">0</span>.<span class="dv">0</span>.<span class="fl">0.1</span> ──</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>✔ Taxonomic backbone<span class="sc">:</span> Pacheco et <span class="fu">al.</span> (<span class="dv">2021</span>) <span class="sc">|</span> Species<span class="sc">:</span> <span class="dv">573</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>ℹ Use <span class="fu">pm_backbone_info</span>() <span class="cf">for</span> full citation and details</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
 <p>If you use this package, please cite:</p>
 <p>The package:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"perumammals"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; To cite perumammals in publications, please use:</span></span>

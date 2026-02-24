@@ -1,6 +1,6 @@
 Package: perumammals
 Title: Taxonomic Backbone and Name Validation Tools for Mammals of Peru
-Version: 0.0.0.1
+Version: 0.0.0.2
 Authors@R: 
     c(person(given = "Paul E.",
              family = "Santos Andrade",

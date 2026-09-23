@@ -71,6 +71,7 @@ to fuzzy matches are set to NA or "—" to maintain consistency.
 ## Examples
 
 ``` r
+
 species <- c(
   "Panthera onca",       # Exact match
   "Pantera onca",        # Fuzzy match (genus misspelled)

@@ -33,6 +33,7 @@ endemic, NA = not found or endemism unknown)
 ## Examples
 
 ``` r
+
 species <- c("Panthera onca",
              "Atelocynus microtis",
              "Felis catus",

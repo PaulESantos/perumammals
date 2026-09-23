@@ -210,6 +210,7 @@ to retrieve ambiguous match details
 ## Examples
 
 ``` r
+
 # Basic usage
 species_list <- c("Panthera onca", "Tremarctos ornatus", "Puma concolor")
 results <- validate_peru_mammals(species_list)

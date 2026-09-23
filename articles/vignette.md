@@ -27,6 +27,7 @@ fuzzy matching.
 ## Loading the Dataset
 
 ``` r
+
 data("peru_mammals")
 
 glimpse(peru_mammals)
@@ -51,6 +52,7 @@ glimpse(peru_mammals)
 ### Orders and Species Richness
 
 ``` r
+
 order_summary <- pm_list_orders() |> 
   dplyr::arrange(dplyr::desc(n_species)) |> 
   dplyr::mutate(percentage = round(n_species / sum(n_species) * 100, 1))
@@ -97,6 +99,7 @@ account for nearly **67%** of Peru’s mammalian diversity.
 ## Endemic Species
 
 ``` r
+
 pm_list_endemic(include_rate = TRUE)
 #> # A tibble: 14 × 7
 #>    order        n_families n_genera n_endemic n_species endemic_rate endemic_pct
@@ -125,6 +128,7 @@ representing **64.4%** of all mammalian endemics in Peru.
 ### Ecoregional Diversity
 
 ``` r
+
 
 # Obtener datos de ecoregiones
 ecoregion_diversity <- pm_list_ecoregions(include_endemic = TRUE)
@@ -221,6 +225,7 @@ The **Selva Baja** contains the highest species richness, while the
 ## Name Validation and Fuzzy Matching
 
 ``` r
+
 species_list <- c(
   "Tremarctos ornatos",
   "Leopardus pardalis",
@@ -254,6 +259,7 @@ standardized scientific names while preserving the original input.
 ### Conservation Assessment
 
 ``` r
+
 endemic_primates <- peru_mammals %>%
   filter(order == "Primates", endemic == TRUE) %>%
   select(genus, species, common_name)
@@ -276,6 +282,7 @@ endemic_primates
 ### Research Data Cleaning
 
 ``` r
+
 field_data <- data.frame(
   site = rep(c("Site_A", "Site_B", "Site_C"), each = 3),
   species = c(

@@ -46,6 +46,7 @@ The function uses string distance metrics to quantify matching quality:
 ## Examples
 
 ``` r
+
 species <- c(
   "Panthera onca",      # Exact
   "Tremarctos orrnatus", # Fuzzy (spelling error)

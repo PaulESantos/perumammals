@@ -27,6 +27,7 @@ return_details = TRUE: Tibble with taxonomic and common name information
 ## Examples
 
 ``` r
+
 species <- c("Panthera onca", "Tremarctos ornatus",
              "Puma concolor", "Myotis bakeri")
 

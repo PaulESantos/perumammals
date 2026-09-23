@@ -155,23 +155,24 @@ information.
 
 ### Core Functions and Name Validation
 
-| Category             | Functionality                           | Conceptual Code Example                                                                         |
-|----------------------|-----------------------------------------|-------------------------------------------------------------------------------------------------|
-| Name Validation      | Validate species names against database | `validate_peru_mammals(c("Thomasomys notatus", "Tapirus terrestris", "Unknown species"))`       |
-| Quick Checks         | Check if species occurs in Peru         | `is_peru_mammal("Tremarctos ornatus")`                                                          |
-| Endemism Query       | Check endemic status                    | `is_endemic_peru("Thomasomys notatus")`                                                         |
-| Match Quality        | Get validation match level              | `match_quality_peru("Puma concolar")`                                                           |
-| Family Summary       | List families with species counts       | [`pm_list_families()`](https://paulesantos.github.io/perumammals/reference/pm_list_families.md) |
-| Family Filter        | Filter by specific family               | `pm_species(family = "Cricetidae")`                                                             |
-| Endemic Analysis     | List endemic species statistics         | [`pm_list_endemic()`](https://paulesantos.github.io/perumammals/reference/pm_list_endemic.md)   |
-| Endemic by Family    | Filter endemics by family               | `pm_endemics(family = "Phyllostomidae")`                                                        |
-| Endemic by Ecoregion | Filter endemics by ecoregion            | `pm_by_ecoregion(ecoregion = "YUN", endemic = TRUE)`                                            |
+| Category | Functionality | Conceptual Code Example |
+|----|----|----|
+| Name Validation | Validate species names against database | `validate_peru_mammals(c("Thomasomys notatus", "Tapirus terrestris", "Unknown species"))` |
+| Quick Checks | Check if species occurs in Peru | `is_peru_mammal("Tremarctos ornatus")` |
+| Endemism Query | Check endemic status | `is_endemic_peru("Thomasomys notatus")` |
+| Match Quality | Get validation match level | `match_quality_peru("Puma concolar")` |
+| Family Summary | List families with species counts | [`pm_list_families()`](https://paulesantos.github.io/perumammals/reference/pm_list_families.md) |
+| Family Filter | Filter by specific family | `pm_species(family = "Cricetidae")` |
+| Endemic Analysis | List endemic species statistics | [`pm_list_endemic()`](https://paulesantos.github.io/perumammals/reference/pm_list_endemic.md) |
+| Endemic by Family | Filter endemics by family | `pm_endemics(family = "Phyllostomidae")` |
+| Endemic by Ecoregion | Filter endemics by ecoregion | `pm_by_ecoregion(ecoregion = "YUN", endemic = TRUE)` |
 
 ------------------------------------------------------------------------
 
 ## Installation
 
 ``` r
+
 ## Install from CRAN (recommended)
 pak::pak("perumammals")
 
@@ -197,6 +198,7 @@ If you use this package, please cite:
 The package:
 
 ``` r
+
 
 citation("perumammals")
 #> To cite perumammals in publications, please use:

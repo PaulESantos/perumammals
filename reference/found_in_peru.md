@@ -26,6 +26,7 @@ Logical vector (TRUE = found, FALSE = not found)
 ## Examples
 
 ``` r
+
 species <- c("Panthera onca", "Tremarctos orrnatus",
              "Tremarctos orrnatos", "Felis catus")
 

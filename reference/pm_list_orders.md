@@ -26,6 +26,7 @@ A tibble with one row per order and the following columns:
 ## Examples
 
 ``` r
+
 pm_list_orders()
 #> # A tibble: 13 × 5
 #>    order            n_families n_genera n_species n_endemic

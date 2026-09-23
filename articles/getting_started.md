@@ -21,6 +21,7 @@ This vignette will show you how to:
 You can install the development version of perumammals from GitHub:
 
 ``` r
+
 # Using pak (recommended)
 pak::pak("PaulESantos/perumammals")
 
@@ -31,6 +32,7 @@ remotes::install_github("PaulESantos/perumammals")
 ## Loading the package
 
 ``` r
+
 library(perumammals)
 ```
 
@@ -40,6 +42,7 @@ The main dataset included in the package is the species list provided as
 an appendix in Pacheco et al. (2021):
 
 ``` r
+
 # Main species backbone
 data(peru_mammals)
 head(peru_mammals)
@@ -80,6 +83,7 @@ The core function
 checks if species names are present in the Peruvian mammal checklist:
 
 ``` r
+
 # Single species
 species_list <- c(
   "Puma concolor",           # Valid name
@@ -127,6 +131,7 @@ results
 ### Check if species occur in Peru
 
 ``` r
+
 # Returns TRUE/FALSE
 is_peru_mammal(species_list)
 #> [1] "Found in Peru" "Found in Peru" "Found in Peru" "Found in Peru"
@@ -136,6 +141,7 @@ is_peru_mammal(species_list)
 ### Identify endemic species
 
 ``` r
+
 # Check which species are endemic to Peru
 species_list <- c("Thomasomys notatus", "Tremarctos ornatus", "Eptesicus mochica", "Puma concolar")
 
@@ -155,6 +161,7 @@ endemic_status
 ### Check match quality
 
 ``` r
+
 # Get match quality levels
 match_quality_peru(species_list)
 #> [1] "Exact" "Exact" "Exact" "Fuzzy"
@@ -166,6 +173,7 @@ The validation functions integrate smoothly with data frames and the
 tidyverse:
 
 ``` r
+
 library(dplyr)
 
 # Create a sample dataset
@@ -197,6 +205,7 @@ my_data_validated
 ### List all families
 
 ``` r
+
 # Get summary of all families
 families <- pm_list_families()
 families
@@ -237,6 +246,7 @@ families |>
 ### Filter by family
 
 ``` r
+
 # Get summary for bat species (Phyllostomidae)
 pm_list_families() |> 
   filter(family == "Phyllostomidae")
@@ -268,6 +278,7 @@ pm_list_families() |>
 ### Get endemic species list
 
 ``` r
+
 # List all endemic species
 endemic_mammals <- pm_species(endemic = TRUE)
 endemic_mammals
@@ -310,6 +321,7 @@ endemic_mammals |>
 ### Endemic species by ecoregion
 
 ``` r
+
 # Compare endemism across ecoregions
 endemic_rate <- pm_list_ecoregions(include_endemic = TRUE)
 #> ── Peruvian Mammal Ecoregions (Brack-Egg, 1986) ────────────────────────────────
@@ -370,6 +382,7 @@ pm_by_ecoregion(ecoregion = "YUN", endemic = TRUE)
 
 ``` r
 
+
 # Count species per ecoregion
 pm_list_ecoregions()
 #> ── Peruvian Mammal Ecoregions (Brack-Egg, 1986) ────────────────────────────────
@@ -397,6 +410,7 @@ pm_list_ecoregions()
 ### Species with widest distribution
 
 ``` r
+
 # Species occurring in most ecoregions
 peru_mammals_ecoregions |> 
   count(scientific_name, name = "n_ecoregions") |> 
@@ -425,6 +439,7 @@ peru_mammals_ecoregions |>
 ### Example 1: Data cleaning workflow
 
 ``` r
+
 # Messy species list from field observations
 field_data <- tibble(
   location = c("Manu", "Tambopata", "Paracas", "Cusco", "Lima"),
@@ -463,6 +478,7 @@ field_data_clean
 ### Example 2: Endemic species summary
 
 ``` r
+
 # Get all endemic mammals
 endemic_species <- pm_species(endemic = TRUE)
 endemic_species
@@ -498,6 +514,7 @@ endemic_species |>
 ### Example 3: Ecoregion-specific analysis
 
 ``` r
+
 # Focus on Selva Baja (Amazon lowlands)
 
 selva_baja_species <- pm_by_ecoregion(ecoregion = "SB")
@@ -546,6 +563,7 @@ The validation algorithm uses a hierarchical matching approach:
 5.  **No match**: No acceptable match found
 
 ``` r
+
 # Examples of different match levels
 test_names <- c(
   "Puma concolor",              # Level: Exact
@@ -579,6 +597,7 @@ When using this package, please cite both the package and the source
 data:
 
 ``` r
+
 citation("perumammals")
 ```
 

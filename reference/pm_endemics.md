@@ -45,6 +45,7 @@ with `endemic = TRUE`.
 ## Examples
 
 ``` r
+
 # All endemic species
 pm_endemics()
 #> # A tibble: 87 × 5

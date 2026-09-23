@@ -2,9 +2,12 @@
 % Please edit documentation in R/pm_match.R
 \name{validate_peru_mammals}
 \alias{validate_peru_mammals}
+\alias{pm_match}
 \title{Match Species Names Against Peru Mammals Database}
 \usage{
 validate_peru_mammals(splist, quiet = TRUE)
+
+pm_match(splist, quiet = TRUE)
 }
 \arguments{
 \item{splist}{A character vector containing the species names to be matched.

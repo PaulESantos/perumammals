@@ -368,3 +368,6 @@ validate_peru_mammals <- function(splist, quiet = TRUE) {
    return(output)
  }
 
+#' @rdname validate_peru_mammals
+#' @export
+pm_match <- validate_peru_mammals

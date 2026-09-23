@@ -2,9 +2,12 @@
 % Please edit documentation in R/perumammals_api.R
 \name{is_endemic_peru}
 \alias{is_endemic_peru}
+\alias{pm_is_endemic}
 \title{Check if species are endemic to Peru}
 \usage{
 is_endemic_peru(splist, return_logical = FALSE, filter_exact = FALSE)
+
+pm_is_endemic(splist, return_logical = FALSE, filter_exact = FALSE)
 }
 \arguments{
 \item{splist}{Character vector of species names}

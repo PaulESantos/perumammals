@@ -2,9 +2,12 @@
 % Please edit documentation in R/perumammals_api.R
 \name{found_in_peru}
 \alias{found_in_peru}
+\alias{pm_found_in_peru}
 \title{Quick check: Is species found in Peru?}
 \usage{
 found_in_peru(splist, exact_only = FALSE)
+
+pm_found_in_peru(splist, exact_only = FALSE)
 }
 \arguments{
 \item{splist}{Character vector of species names}

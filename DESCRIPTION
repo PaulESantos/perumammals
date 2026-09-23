@@ -1,6 +1,6 @@
 Package: perumammals
 Title: Taxonomic Backbone and Name Validation Tools for Mammals of Peru
-Version: 0.0.0.2
+Version: 0.1.0.9000
 Authors@R: 
     c(person(given = "Paul E.",
              family = "Santos Andrade",
@@ -14,15 +14,14 @@ Authors@R:
              comment = c(ORCID = "0000-0001-5240-2464")))
 Maintainer: Paul E. Santos Andrade <paulefrens@gmail.com>
 Description: 
-    Provides a curated taxonomic backbone of mammal species from Peru based on 
-    Pacheco et al. (2021) "Lista actualizada de la diversidad de los mamíferos 
-    del Perú y una propuesta para su actualización" <doi:10.15381/rpb.v28i4.21019>. 
-    The package includes standardized species data, occurrence by ecoregions, 
-    endemism status, and tools for validating and matching scientific names 
-    through exact and fuzzy procedures. It is designed as a lightweight and 
-    dependable reference for ecological, environmental, biogeographic, and 
-    conservation workflows that require reliable species information for 
-    Peruvian mammals.
+    Provides a curated taxonomic backbone of mammal species recorded in Peru,
+    based on the checklist published by Pacheco and collaborators (2021)
+    <doi:10.15381/rpb.v28i4.21019>. The package includes standardized species
+    data, occurrence records by ecological regions, endemic status, and tools
+    for validating and matching scientific names through exact and approximate
+    string procedures. It is designed as a lightweight and reliable reference
+    for ecological, environmental, biogeographical, and conservation workflows
+    that require verified species information for Peruvian mammals.
 License: MIT + file LICENSE
 URL: https://github.com/PaulESantos/perumammals,
     https://paulesantos.github.io/perumammals/
@@ -33,7 +32,6 @@ Encoding: UTF-8
 LazyData: true
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Imports: 
     assertthat,
     cli,
@@ -53,3 +51,4 @@ Suggests:
     tidyr,
     ggtext
 VignetteBuilder: knitr
+Config/roxygen2/version: 8.1.0

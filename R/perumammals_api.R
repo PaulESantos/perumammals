@@ -220,6 +220,10 @@ is_peru_mammal <- function(splist,
   }
 }
 
+#' @rdname is_peru_mammal
+#' @export
+pm_is_mammal <- is_peru_mammal
+
 #' Check if species are endemic to Peru
 #'
 #' @description
@@ -271,6 +275,10 @@ is_endemic_peru <- function(splist,
     return(results$Endemism.Status)
   }
 }
+
+#' @rdname is_endemic_peru
+#' @export
+pm_is_endemic <- is_endemic_peru
 
 
 #' Get match quality for Peru mammal names
@@ -343,6 +351,10 @@ match_quality_peru <- function(splist, return_details = FALSE) {
   }
 }
 
+#' @rdname match_quality_peru
+#' @export
+pm_match_quality <- match_quality_peru
+
 
 #' Get taxonomic and common name information for Peru mammals
 #'
@@ -403,6 +415,10 @@ get_common_names_peru <- function(splist, return_details = FALSE) {
   }
 }
 
+#' @rdname get_common_names_peru
+#' @export
+pm_common_names <- get_common_names_peru
+
 
 
 #' Quick check: Is species found in Peru?
@@ -439,3 +455,7 @@ found_in_peru <- function(splist, exact_only = FALSE) {
 
   return(results$matched)
 }
+
+#' @rdname found_in_peru
+#' @export
+pm_found_in_peru <- found_in_peru

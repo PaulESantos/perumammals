@@ -2,9 +2,12 @@
 % Please edit documentation in R/perumammals_api.R
 \name{match_quality_peru}
 \alias{match_quality_peru}
+\alias{pm_match_quality}
 \title{Get match quality for Peru mammal names}
 \usage{
 match_quality_peru(splist, return_details = FALSE)
+
+pm_match_quality(splist, return_details = FALSE)
 }
 \arguments{
 \item{splist}{Character vector of species names}

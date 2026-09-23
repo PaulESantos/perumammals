@@ -14,20 +14,17 @@
 #' Load Peru Mammals Database
 #' @keywords internal
 .load_target_peru <- function(quiet) {
-  # En producción, esto cargaría el dataset del paquete
-  # data(peru_mammals, envir = environment())
-
-  # Por ahora, verificamos que exista
-  if (!exists("peru_mammals")) {
-    stop(
-      "peru_mammals dataset not found. ",
-      "Please load it with data(peru_mammals).",
-      call. = FALSE
-    )
+  if (exists("peru_mammals", where = asNamespace("perumammals"), inherits = FALSE)) {
+    target <- get("peru_mammals", envir = asNamespace("perumammals"))
+  } else if (exists("peru_mammals", envir = .GlobalEnv)) {
+    target <- get("peru_mammals", envir = .GlobalEnv)
+  } else {
+    data_env <- new.env()
+    utils::data("peru_mammals", package = "perumammals", envir = data_env)
+    target <- data_env$peru_mammals
   }
 
-  # Limpiar espacios en blanco
-  peru_mammals |>
+  target |>
     dplyr::mutate(dplyr::across(
       .cols = dplyr::where(is.character),
       .fns = ~ stringr::str_squish(.x)

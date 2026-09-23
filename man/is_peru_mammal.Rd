@@ -2,9 +2,17 @@
 % Please edit documentation in R/perumammals_api.R
 \name{is_peru_mammal}
 \alias{is_peru_mammal}
+\alias{pm_is_mammal}
 \title{Check if species are Peru mammals}
 \usage{
 is_peru_mammal(
+  splist,
+  return_details = FALSE,
+  match_type = "status",
+  filter_exact = FALSE
+)
+
+pm_is_mammal(
   splist,
   return_details = FALSE,
   match_type = "status",

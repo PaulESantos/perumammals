@@ -2,9 +2,12 @@
 % Please edit documentation in R/perumammals_api.R
 \name{get_common_names_peru}
 \alias{get_common_names_peru}
+\alias{pm_common_names}
 \title{Get taxonomic and common name information for Peru mammals}
 \usage{
 get_common_names_peru(splist, return_details = FALSE)
+
+pm_common_names(splist, return_details = FALSE)
 }
 \arguments{
 \item{splist}{Character vector of species names}

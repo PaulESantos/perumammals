@@ -1,7 +1,6 @@
 ---
 title: "Exploring Mammal Diversity in Peru with perumammals"
 author: "Paul Efren Santos Andrade"
-date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Exploring Mammal Diversity in Peru with perumammals}

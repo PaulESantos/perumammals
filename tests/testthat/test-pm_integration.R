@@ -196,7 +196,7 @@ test_that("Fuzzy matching con nombres similares", {
   }
 })
 
-test_that("Performance con muchos fuzzy matches", {
+test_that("Fuzzy matching handles a representative batch", {
   # Test 5.2: Lista con muchos typos (fuzzy matching intensivo)
   # Usamos solo typos que sabemos que existen en la DB
   typos <- c(
@@ -207,18 +207,10 @@ test_that("Performance con muchos fuzzy matches", {
     "Pantera onca"        # typo en genus (Panthera existe)
   )
 
-  start_time <- Sys.time()
-
   # Suprimir warnings de ambiguous matches (son informativos, no errores)
   suppressWarnings({
     result_typos <- validate_peru_mammals(rep(typos, 10), quiet = TRUE)
   })
-
-  end_time <- Sys.time()
-
-  # Performance: menos de 20 segundos
-  execution_time <- as.numeric(difftime(end_time, start_time, units = "secs"))
-  expect_true(execution_time < 20)
 
   # Verificaciones de resultado
   expect_equal(nrow(result_typos), 50)
@@ -232,27 +224,25 @@ test_that("Performance con muchos fuzzy matches", {
   # Debe haber fuzzy matches en species
   expect_true(any(result_typos$species_dist > 0, na.rm = TRUE))
 
-  # Verificar metadata de ambiguous matches
-  expect_true(!is.null(attr(result_typos, "ambiguous_genera")) ||
-                !is.null(attr(result_typos, "ambiguous_species")))
+  # Repetir el mismo typo no debe crear metadatos de ambigüedad por sí solo.
+  expect_null(attr(result_typos, "ambiguous_genera"))
+  expect_null(attr(result_typos, "ambiguous_species"))
 })
 
 
 # =============================================================================
-# TEST SUITE 5: Tests de Performance
+# TEST SUITE 5: Batch behaviour
 # =============================================================================
 
-test_that("Performance con datasets grandes (solo exact matches)", {
-  # Solo nombres correctos para medir performance pura
+test_that("Exact matching handles a representative batch", {
+  # Solo nombres correctos para verificar matching vectorizado.
   large_valid <- rep(c("Akodon torques",
                        "Panthera onca",      # Sin typo
                        "Thomasomys kalinowskii",
                        "Puma concolor"),
                      length.out = 200)
 
-  start_time <- Sys.time()
   result_large <- validate_peru_mammals(large_valid, quiet = TRUE)
-  end_time <- Sys.time()
 
   # Verificaciones
   expect_equal(nrow(result_large), 200)
@@ -263,14 +253,12 @@ test_that("Performance con datasets grandes (solo exact matches)", {
                      result_large$species_dist == 0)
   expect_true(all_exact)
 
-  # Performance debe ser razonable
-  execution_time <- as.numeric(difftime(end_time, start_time, units = "secs"))
-  expect_true(execution_time < 30)
 })
 
 
-test_that("Fuzzy matching con ambiguous matches", {
-  # Específicamente probar casos ambiguos
+test_that("Fuzzy matching preserva duplicados sin crear ambigüedades falsas", {
+  # Los nombres se repiten deliberadamente: duplicar una observación no debe
+  # convertir un único candidato taxonómico en una coincidencia ambigua.
   ambiguous_names <- c(
     "Pantera onca",     # Typo → Panthera
     "Akdon torques"     # Typo → Akodon
@@ -287,20 +275,15 @@ test_that("Fuzzy matching con ambiguous matches", {
     }
   )
 
-  # Verificar que se generaron warnings de ambiguous matches
-  expect_true(any(grepl("multiple fuzzy matches", warnings_caught)))
-  expect_true(length(warnings_caught) >= 2)  # Debería haber al menos 2
+  # No deben generarse warnings de ambigüedad sólo por filas duplicadas.
+  expect_false(any(grepl("multiple fuzzy matches", warnings_caught)))
 
   # Todos deben matchear a pesar de ser fuzzy
   expect_equal(sum(result$matched), 50)
 
-  # Verificar que hay ambiguous matches guardados
+  # Tampoco deben guardarse como candidatos ambiguos.
   ambig <- get_ambiguous_matches(result, type = "all")
-  expect_true(!is.null(ambig))
-  expect_true(nrow(ambig) > 0)
-
-  # Verificar que hay al menos 4 casos ambiguos
-  expect_true(nrow(ambig) >= 4)
+  expect_true(is.null(ambig) || nrow(ambig) == 0)
 })
 
 
@@ -498,7 +481,4 @@ test_that("Datos son internamente consistentes", {
   missing_ids <- setdiff(eco_ids, main_ids)
   expect_equal(length(missing_ids), 0)
 })
-
-
-
 

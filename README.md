@@ -9,10 +9,12 @@ Taxonomic backbone and name validation tools for the mammals of Peru.
 
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
+[![Development
+status](https://img.shields.io/badge/development-active-355E3B.svg)](https://github.com/PaulESantos/perumammals)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/perumammals)](https://CRAN.R-project.org/package=perumammals)
-[![](http://cranlogs.r-pkg.org/badges/grand-total/perumammals?color=green)](https://cran.r-project.org/package=perumammals)
-[![](http://cranlogs.r-pkg.org/badges/last-week/perumammals?color=green)](https://cran.r-project.org/package=perumammals)
+[![](https://cranlogs.r-pkg.org/badges/grand-total/perumammals?color=green)](https://cran.r-project.org/package=perumammals)
+[![](https://cranlogs.r-pkg.org/badges/last-week/perumammals?color=green)](https://cran.r-project.org/package=perumammals)
 [![R-CMD-check](https://github.com/PaulESantos/perumammals/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/PaulESantos/perumammals/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
@@ -197,7 +199,7 @@ remotes::install_github("PaulESantos/perumammals")
 
 ``` r
 library(perumammals)
-── Attaching perumammals ───────────────────────────────────────────────────────────────── perumammals 0.0.0.1 ──
+── Attaching perumammals ──────────────────────────────────────────────────────────────────── perumammals 0.1.0 ──
 ✔ Taxonomic backbone: Pacheco et al. (2021) | Species: 573
 ℹ Use pm_backbone_info() for full citation and details
 ```
@@ -215,7 +217,7 @@ citation("perumammals")
 #> 
 #>   Santos Andrade, P. E., & Gonzales Guillen, F. N. (2025). perumammals:
 #>   Taxonomic Backbone and Name Validation Tools for Mammals of Peru. R
-#>   package version 0.0.0.1. https://paulesantos.github.io/perumammals/
+#>   package version 0.1.0. https://paulesantos.github.io/perumammals/
 #> 
 #> The taxonomic backbone included in this package is based on:
 #> 

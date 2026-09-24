@@ -1,6 +1,6 @@
 Package: perumammals
 Title: Taxonomic Backbone and Name Validation Tools for Mammals of Peru
-Version: 0.1.0.9000
+Version: 0.1.0
 Authors@R: 
     c(person(given = "Paul E.",
              family = "Santos Andrade",
@@ -11,7 +11,11 @@ Authors@R:
              family = "Gonzales Guillen",
              role = "ctb",
              email = "fngonzales@uc.cl",
-             comment = c(ORCID = "0000-0001-5240-2464")))
+             comment = c(ORCID = "0000-0001-5240-2464")),
+      person(given = "Ismael",
+             family = "Silva",
+             role = "ctb",
+             comment = "Logo design"))
 Maintainer: Paul E. Santos Andrade <paulefrens@gmail.com>
 Description: 
     Provides a curated taxonomic backbone of mammal species recorded in Peru,

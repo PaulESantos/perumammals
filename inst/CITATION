@@ -1,3 +1,5 @@
+package_version <- utils::packageDescription("perumammals")$Version
+
 bibentry(
   bibtype = "Manual",
   title = "perumammals: Taxonomic Backbone and Name Validation Tools for Mammals of Peru",
@@ -6,12 +8,12 @@ bibentry(
     person("Fiorella Nasha", "Gonzales Guillen")
   ),
   year = "2025",
-  note = "R package version 0.0.0.1",
+  note = paste("R package version", package_version),
   url = "https://paulesantos.github.io/perumammals/",
   textVersion = paste(
     "Santos Andrade, P. E., & Gonzales Guillen, F. N. (2025).",
     "perumammals: Taxonomic Backbone and Name Validation Tools for Mammals of Peru.",
-    "R package version 0.0.0.1.",
+    paste0("R package version ", package_version, "."),
     "https://paulesantos.github.io/perumammals/"
   ),
   header = "To cite perumammals in publications, please use:",

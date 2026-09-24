@@ -52,14 +52,9 @@
   # Eliminar múltiples espacios
   fixed7 <- gsub(" +", " ", fixed6)
 
-  # Eliminar símbolos no alfabéticos al inicio
-  for(j in 1:100) {
-    whichs <- which(grepl("^[^A-Z]", fixed7))
-    if(length(whichs) > 0)
-      fixed7[whichs] <- gsub("^[^A-Z]", "", fixed7[whichs])
-    whichs <- which(grepl("^[^A-Z]", fixed7))
-    if(length(whichs) == 0) break
-  }
+  # Eliminar símbolos no alfabéticos al inicio en una sola pasada. El bucle
+  # anterior hacía hasta 100 recorridos completos del vector.
+  fixed7 <- gsub("^[^A-Z]+", "", fixed7)
 
   # Reconstruir el vector completo manteniendo NAs en sus posiciones originales
   result <- character(length(splist))

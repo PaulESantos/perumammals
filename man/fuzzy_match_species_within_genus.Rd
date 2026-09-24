@@ -27,7 +27,8 @@ string distance to account for spelling variations. Peru mammals database
 does not include infraspecific taxa.
 }
 \details{
-This function processes each matched genus separately for efficiency.
+This function processes each matched genus separately for efficiency. The
+maximum edit distance for species names is two characters.
 If multiple species match with the same distance, a warning is issued
 and the first match is selected. Use \code{get_ambiguous_matches(result, type = "species")}
 to examine ambiguous cases.

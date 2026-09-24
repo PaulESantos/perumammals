@@ -74,6 +74,11 @@ fuzzy_match_genus <- function(df, target_df = NULL) {
       dplyr::mutate(fuzzy_genus_dist = NULL)
   }
 
+  # Keep an internal row key even when callers invoke this helper without the
+  # pipeline's `sorter` column. Identical input rows must be returned once
+  # each, not collapsed while choosing a tied candidate.
+  df$.pm_input_row <- seq_len(nrow(df))
+
   # ==========================================================================
   # SECTION 2: Prepare Target Genera
   # ==========================================================================
@@ -98,7 +103,10 @@ fuzzy_match_genus <- function(df, target_df = NULL) {
     dplyr::mutate(Matched.Genus = genus_upper) |>
     dplyr::select(-c('genus', 'genus_upper'))
 
-  # Step 2: Split into those with valid distances and those without
+  # Step 2: Split into those with valid distances and those without. A left
+  # join already contains one NA row for every unmatched input, so this also
+  # provides the unmatched set without performing a second string-distance
+  # join.
   matched_valid <- matched_all |>
     dplyr::filter(!is.na(fuzzy_genus_dist))
 
@@ -120,9 +128,13 @@ fuzzy_match_genus <- function(df, target_df = NULL) {
   # SECTION 4: Handle Ambiguous Matches
   # ==========================================================================
 
-  # Detect ambiguous matches (multiple genera with same distance)
+  # Detect tied candidates per input genus. Distinct is essential here:
+  # repeated input names must not be interpreted as ambiguous candidates.
   ambiguous_matches <- matched_temp |>
-    dplyr::filter(dplyr::n() > 1)
+    dplyr::distinct(Orig.Genus, Matched.Genus, fuzzy_genus_dist) |>
+    dplyr::group_by(Orig.Genus) |>
+    dplyr::filter(dplyr::n() > 1) |>
+    dplyr::ungroup()
 
   if (nrow(ambiguous_matches) > 0) {
     # Count unique genera with ambiguous matches
@@ -192,6 +204,7 @@ fuzzy_match_genus <- function(df, target_df = NULL) {
     # Group by original columns to preserve each input row
     matched <- matched_temp |>
       dplyr::group_by(dplyr::across(dplyr::all_of(original_cols))) |>
+      dplyr::arrange(fuzzy_genus_dist, Matched.Genus, .by_group = TRUE) |>
       dplyr::slice_head(n = 1) |>
       dplyr::ungroup()
   } else {
@@ -207,12 +220,8 @@ fuzzy_match_genus <- function(df, target_df = NULL) {
   # SECTION 6: Identify Unmatched and Combine Results
   # ==========================================================================
 
-  unmatched <- df |>
-    fuzzyjoin::stringdist_anti_join(
-      target_genera,
-      by = c('Orig.Genus' = 'genus_upper'),
-      max_dist = 1
-    )
+  unmatched <- matched_invalid |>
+    dplyr::select(-dplyr::any_of(c("genus", "genus_upper")))
 
   assertthat::assert_that(
     nrow(df) == (nrow(matched) + nrow(unmatched)),
@@ -229,7 +238,8 @@ fuzzy_match_genus <- function(df, target_df = NULL) {
     unmatched,
     .id = 'fuzzy_match_genus'
   ) |>
-    dplyr::mutate(fuzzy_match_genus = (fuzzy_match_genus == 1)) |>
+    dplyr::mutate(fuzzy_match_genus = (fuzzy_match_genus == "1")) |>
+    dplyr::select(-dplyr::all_of(".pm_input_row")) |>
     dplyr::arrange(Orig.Genus) |>
     dplyr::relocate(Orig.Genus)
 
@@ -261,7 +271,8 @@ fuzzy_match_genus <- function(df, target_df = NULL) {
 #' - `Matched.Species`: The matched species name
 #'
 #' @details
-#' This function processes each matched genus separately for efficiency.
+#' This function processes each matched genus separately for efficiency. The
+#' maximum edit distance for species names is two characters.
 #' If multiple species match with the same distance, a warning is issued
 #' and the first match is selected. Use \code{get_ambiguous_matches(result, type = "species")}
 #' to examine ambiguous cases.
@@ -309,6 +320,10 @@ fuzzy_match_species_within_genus <- function(df, target_df = NULL) {
       dplyr::mutate(fuzzy_species_dist = NULL)
   }
 
+  # See fuzzy_match_genus(): this prevents identical rows from being
+  # collapsed when this helper is used outside the main pipeline.
+  df$.pm_input_row <- seq_len(nrow(df))
+
   # ==========================================================================
   # SECTION 2: Process by Matched Genus
   # ==========================================================================
@@ -347,6 +362,7 @@ fuzzy_match_species_within_genus <- function(df, target_df = NULL) {
   # ==========================================================================
 
   res <- dplyr::bind_rows(res_with_attrs) |>
+    dplyr::select(-dplyr::all_of(".pm_input_row")) |>
     dplyr::relocate(c('Orig.Genus', 'Orig.Species'))
 
   # Re-attach consolidated ambiguous attribute
@@ -409,11 +425,14 @@ fuzzy_match_species_within_genus_helper <- function(df, target_df) {
     fuzzyjoin::stringdist_left_join(
       database_subset,
       by = c('Orig.Species' = 'species_upper'),
+      max_dist = 2,
       distance_col = 'fuzzy_species_dist'
     ) |>
     dplyr::mutate(Matched.Species = species_upper)
 
-  # Step 2: Split into those with valid distances and those without
+  # Step 2: Split into those with valid distances and those without. The
+  # latter are retained from this join instead of recalculating distances
+  # with stringdist_anti_join().
   matched_valid <- matched_all |>
     dplyr::filter(!is.na(fuzzy_species_dist))
 
@@ -436,6 +455,8 @@ fuzzy_match_species_within_genus_helper <- function(df, target_df) {
   # ==========================================================================
 
   ambiguous_matches <- matched |>
+    dplyr::distinct(Orig.Genus, Orig.Species, Matched.Species,
+                    fuzzy_species_dist) |>
     dplyr::group_by(Orig.Genus, Orig.Species) |>
     dplyr::filter(dplyr::n() > 1) |>
     dplyr::ungroup()
@@ -504,7 +525,7 @@ fuzzy_match_species_within_genus_helper <- function(df, target_df) {
     # Group by original columns to preserve each input row's identity
     matched_final <- matched |>
       dplyr::group_by(dplyr::across(dplyr::all_of(original_cols))) |>
-      dplyr::arrange(fuzzy_species_dist) |>
+      dplyr::arrange(fuzzy_species_dist, Matched.Species, .by_group = TRUE) |>
       dplyr::slice_head(n = 1) |>
       dplyr::ungroup()
   } else {
@@ -525,11 +546,10 @@ fuzzy_match_species_within_genus_helper <- function(df, target_df) {
   # Identify Unmatched (using anti_join on original df)
   # ==========================================================================
 
-  unmatched <- fuzzyjoin::stringdist_anti_join(
-    df,
-    database_subset,
-    by = c('Orig.Species' = 'species_upper')
-  )
+  unmatched <- matched_invalid |>
+    dplyr::mutate(Matched.Species = NA_character_) |>
+    dplyr::select(-dplyr::any_of(c("species", "species_upper",
+                                   "scientific_name", "common_name")))
 
   # ==========================================================================
   # Validate Row Counts

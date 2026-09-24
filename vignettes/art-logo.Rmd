@@ -1,7 +1,6 @@
 ---
 title: "perumammals Package Logo"
 author: ""
-date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{perumammals Package Logo}
@@ -55,4 +54,3 @@ The hexagonal design with teal borders and light blue background creates a moder
 ---
 
 *Logo design © Ismael Silva. Used with permission for the perumammals R package.*
-

@@ -1,0 +1,20 @@
+Copyright and attribution notices for non-code package components
+
+Logo
+----
+Copyright (c) Ismael Silva. The logo in man/figures/logo_perumammals.png is
+included in perumammals with the designer's permission for distribution as
+part of this package. It is not relicensed under the package's MIT license.
+
+Taxonomic data
+--------------
+The packaged taxonomic backbone is a curated, structured representation of
+the checklist cited in DESCRIPTION and inst/CITATION:
+
+Pacheco, V., Cadenillas, R., Zeballos, H., Hurtado, C. M., Ruelas, D., & Pari,
+A. (2021). Lista actualizada de la diversidad de los mamíferos del Perú y una
+propuesta para su actualización. Revista Peruana de Biología, 28(4), e21019.
+https://doi.org/10.15381/rpb.v28i4.21019
+
+The package authors are responsible for the data transformation and package
+code. The source publication and its authors retain their respective rights.

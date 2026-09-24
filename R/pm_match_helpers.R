@@ -11,24 +11,28 @@
 }
 
 
+# Cached normalised version of the package backbone.  The public matching
+# functions never modify this object, so preparing it once avoids repeatedly
+# squishing every character column for batch-oriented API calls.
+.peru_target_cache <- new.env(parent = emptyenv())
+
 #' Load Peru Mammals Database
 #' @keywords internal
 .load_target_peru <- function(quiet) {
-  if (exists("peru_mammals", where = asNamespace("perumammals"), inherits = FALSE)) {
-    target <- get("peru_mammals", envir = asNamespace("perumammals"))
-  } else if (exists("peru_mammals", envir = .GlobalEnv)) {
-    target <- get("peru_mammals", envir = .GlobalEnv)
-  } else {
-    data_env <- new.env()
-    utils::data("peru_mammals", package = "perumammals", envir = data_env)
-    target <- data_env$peru_mammals
+  if (exists("normalised", envir = .peru_target_cache, inherits = FALSE)) {
+    return(get("normalised", envir = .peru_target_cache, inherits = FALSE))
   }
 
-  target |>
+  # The packaged dataset is the sole source of truth. Reading an object of
+  # the same name from .GlobalEnv would make results depend on session state.
+  target <- get("peru_mammals", envir = asNamespace("perumammals")) |>
     dplyr::mutate(dplyr::across(
       .cols = dplyr::where(is.character),
       .fns = ~ stringr::str_squish(.x)
     ))
+
+  assign("normalised", target, envir = .peru_target_cache)
+  target
 }
 
 

@@ -61,5 +61,6 @@ navbar:
       - text: Art perumammalas
         href: articles/art-logo.html
 development:
-  mode: auto
-
+  # Keep the development-status sidebar visible at the root site while 0.1.0
+  # is being prepared and reviewed. Change to "auto" after CRAN publication.
+  mode: unreleased

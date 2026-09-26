@@ -16,7 +16,6 @@ Authors@R:
              family = "Silva",
              role = "ctb",
              comment = "Logo design"))
-Maintainer: Paul E. Santos Andrade <paulefrens@gmail.com>
 Description: 
     Provides a curated taxonomic backbone of mammal species recorded in Peru,
     based on the checklist published by Pacheco and collaborators (2021)
@@ -34,6 +33,7 @@ Depends:
     R (>= 4.1)
 Encoding: UTF-8
 LazyData: true
+ByteCompile: true
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
 Imports: 

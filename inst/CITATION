@@ -1,4 +1,4 @@
-package_version <- utils::packageDescription("perumammals")$Version
+package_version <- if (!is.null(meta$Version)) meta$Version else "0.1.0"
 
 bibentry(
   bibtype = "Manual",
